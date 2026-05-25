@@ -1,3 +1,12 @@
+
+// ============================================================
+//  CONFIGURATION — Replace with your own values
+// ============================================================
+//const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyqB6xozycM00fhPfEPm9Po7C0144gJe0n3v8Ff464wKtuYtqinuOIfMpxPweCOciPD/exec';
+//const SHEET_CSV_URL   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQppAQITDVf3sWVrwF_yxWdfhGXar9lW6ZPj7SMybS2BE2Qltp8hExEamHfSVggFiKuravuStfIauNE/pub?output=csv';
+// Use File → Share → Publish to web → CSV  (NOT the /export?format=csv URL)
+// ============================================================
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -199,29 +208,42 @@ body {
 @keyframes dropIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
 .autocomplete-dropdown.open { display: block; }
 
+.autocomplete-dropdown { max-height: 320px; }
+
 .dropdown-item {
-  padding: 11px 16px; cursor: pointer; display: flex; flex-direction: column; gap: 2px;
+  padding: 10px 16px; cursor: pointer;
   border-bottom: 1px solid var(--cream-dark); transition: background 0.12s;
 }
 .dropdown-item:last-child { border-bottom: none; }
 .dropdown-item:hover { background: var(--gold-pale); }
-.dropdown-item-name { font-size: 14px; font-weight: 600; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
-.dropdown-item-name mark { background: none; color: var(--gold); font-weight: 800; }
-.dropdown-item-meta { font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Top row: full name text + small badges pushed right */
+.dropdown-item-row {
+  display: flex; align-items: center; gap: 8px;
+}
+/* The name text itself — never wraps, never gets cut by a badge */
+.dropdown-item-name-text {
+  font-size: 14px; font-weight: 600; color: var(--text-primary);
+  flex: 1; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.dropdown-item-name-text mark { background: none; color: var(--gold); font-weight: 800; }
+.dropdown-item-badges { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+.dropdown-item-meta { font-size: 11px; color: var(--text-muted); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dropdown-empty { padding: 14px 16px; font-size: 13px; color: var(--text-muted); text-align: center; font-style: italic; }
 
-/* Already-checked-in badge in dropdown */
+/* Badges */
 .dd-checked-badge {
   display: inline-flex; align-items: center; gap: 4px;
-  padding: 2px 8px; border-radius: 50px; font-size: 10px; font-weight: 700;
+  padding: 2px 7px; border-radius: 50px; font-size: 10px; font-weight: 700;
   background: var(--success-bg); color: var(--success); border: 1px solid rgba(45,122,79,0.2);
-  margin-left: auto; flex-shrink: 0;
+  white-space: nowrap;
 }
 .dd-gift-badge {
   display: inline-flex; align-items: center; gap: 3px;
-  padding: 2px 8px; border-radius: 50px; font-size: 10px; font-weight: 700;
+  padding: 2px 7px; border-radius: 50px; font-size: 10px; font-weight: 700;
   background: linear-gradient(135deg, #fff3cd, #ffeaa0); color: #7a5800;
-  border: 1px solid rgba(184,134,11,0.3); flex-shrink: 0;
+  border: 1px solid rgba(184,134,11,0.3); white-space: nowrap;
 }
 
 /* ===== GUEST BANNER ===== */
@@ -233,35 +255,15 @@ body {
 .guest-banner.new   { display: flex; background: var(--gold-pale); border: 1px solid rgba(180,148,80,0.3); color: var(--brown-mid); }
 .guest-banner.warn  { display: flex; background: #fff3cd; border: 1px solid rgba(184,134,11,0.25); color: #7a5800; }
 
-/* ===== GIFT BAG BANNER ===== */
-.gift-banner {
-  display: none; align-items: center; gap: 14px; padding: 16px 20px;
-  border-radius: var(--radius-md); margin-bottom: 20px;
-  background: linear-gradient(135deg, #fffbea, #fff3cd);
-  border: 2px solid var(--gold-light);
-  box-shadow: 0 4px 16px rgba(212,175,55,0.2);
-  animation: giftPop 0.4s cubic-bezier(0.34,1.56,0.64,1);
-}
-@keyframes giftPop { from { opacity:0; transform:scale(0.95) translateY(8px); } to { opacity:1; transform:scale(1) translateY(0); } }
-.gift-banner.visible { display: flex; }
-.gift-icon-wrap {
-  width: 52px; height: 52px; border-radius: var(--radius-md); flex-shrink: 0;
+/* ===== GIFT INDICATOR (inline in guest banner — subtle, staff-only) ===== */
+.gift-indicator {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 50px; margin-left: 8px;
   background: linear-gradient(135deg, var(--gold), var(--gold-light));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 24px; color: var(--white);
-  box-shadow: 0 4px 12px rgba(180,148,80,0.4);
-  position: relative;
+  color: var(--brown-dark); font-size: 11px; font-weight: 700;
+  box-shadow: 0 1px 6px rgba(180,148,80,0.35); vertical-align: middle;
+  white-space: nowrap;
 }
-.gift-icon-check {
-  position: absolute; bottom: -4px; right: -4px; width: 20px; height: 20px;
-  background: var(--success); border-radius: 50%; border: 2px solid var(--white);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 9px; color: var(--white);
-}
-.gift-text-wrap { flex: 1; }
-.gift-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--brown-dark); }
-.gift-sub { font-size: 12px; color: var(--brown-mid); margin-top: 2px; }
-.gift-sparkles { font-size: 22px; letter-spacing: 2px; flex-shrink: 0; }
 
 /* ===== FORM ===== */
 .form-divider { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
@@ -528,20 +530,7 @@ body {
         </div>
       </div>
 
-      <!-- GIFT BAG BANNER -->
-      <div class="gift-banner" id="giftBanner">
-        <div class="gift-icon-wrap">
-          <i class="fa-solid fa-gift"></i>
-          <div class="gift-icon-check"><i class="fa-solid fa-check"></i></div>
-        </div>
-        <div class="gift-text-wrap">
-          <div class="gift-title">🎁 Gift Bag Eligible!</div>
-          <div class="gift-sub">This guest is entitled to a gift bag. Please hand one over on check-in.</div>
-        </div>
-        <div class="gift-sparkles">✨</div>
-      </div>
-
-      <!-- GUEST BANNER -->
+      <!-- GUEST BANNER (gift indicator embedded inline here by JS) -->
       <div class="guest-banner" id="guestBanner">
         <i class="fa-solid fa-circle-check" id="guestBannerIcon"></i>
         <span id="guestBannerText"></span>
@@ -612,6 +601,7 @@ const SHEET_CSV_URL   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQppAQI
 // Use File → Share → Publish to web → CSV  (NOT the /export?format=csv URL)
 // ============================================================
 
+  
 // ─── State ───────────────────────────────────────────────────
 let guestList    = [];   // loaded from Google Sheet
 let matchedGuest = null; // currently selected guest
@@ -904,10 +894,9 @@ document.getElementById('searchInput').addEventListener('input', function() {
       const org  = getGuestOrg(g);
       const idx  = guestList.indexOf(g);
       return `<div class="dropdown-item" onmousedown="selectNameGuest(${idx})">
-        <div class="dropdown-item-name">
-          ${highlightMatch(name, qRaw)}
-          ${giftBadge(g)}
-          ${checkedBadge(g)}
+        <div class="dropdown-item-row">
+          <span class="dropdown-item-name-text">${highlightMatch(name, qRaw)}</span>
+          <span class="dropdown-item-badges">${giftBadge(g)}${checkedBadge(g)}</span>
         </div>
         ${org ? `<div class="dropdown-item-meta"><i class="fa-solid fa-building" style="margin-right:4px;font-size:10px"></i>${escHtml(org)}</div>` : ''}
       </div>`;
@@ -951,9 +940,9 @@ document.getElementById('orgSearchInput').addEventListener('input', function() {
       const org  = getGuestOrg(g);
       const idx  = guestList.indexOf(g);
       return `<div class="dropdown-item" onmousedown="selectOrgGuest(${idx})">
-        <div class="dropdown-item-name">
-          ${highlightMatch(org, qRaw)}
-          ${giftBadge(g)}
+        <div class="dropdown-item-row">
+          <span class="dropdown-item-name-text">${highlightMatch(org, qRaw)}</span>
+          <span class="dropdown-item-badges">${giftBadge(g)}</span>
         </div>
         <div class="dropdown-item-meta"><i class="fa-solid fa-user" style="margin-right:4px;font-size:10px"></i>${escHtml(name)}</div>
       </div>`;
@@ -977,12 +966,14 @@ function selectOrgGuest(idx) {
   populateFormFromGuest(g);
 }
 
-// ─── Gift banner ──────────────────────────────────────────────
-function showGiftBanner(show) {
-  document.getElementById('giftBanner').classList.toggle('visible', show);
+function clearForm() {
+  ['fieldName','fieldOrg','fieldDesig','fieldEmail','fieldMobile','fieldRemark','fieldArrival'].forEach(id => setField(id,''));
+  matchedGuest = null;
+  document.getElementById('guestBanner').className = 'guest-banner';
+  document.getElementById('submitBtnText').textContent = 'Complete Check-In';
+  document.getElementById('searchInput').value = '';
+  document.getElementById('orgSearchInput').value = '';
 }
-
-// ─── Search functions ─────────────────────────────────────────
 function searchGuest() {
   const query = document.getElementById('searchInput').value.trim().toLowerCase();
   if (!query) { showStatus('Please enter a name to search.', 'error'); return; }
@@ -998,7 +989,6 @@ function searchGuest() {
     if (isCheckedInToday(found)) {
       setBanner('warn', 'fa-circle-exclamation',
         `<strong>${escHtml(getGuestName(found))}</strong> is already checked in today (${found.ArrivalTime||found['Arrival Time']||''}).`);
-      showGiftBanner(false);
       return;
     }
     populateFormFromGuest(found);
@@ -1007,7 +997,6 @@ function searchGuest() {
     setField('fieldName', document.getElementById('searchInput').value.trim());
     setBanner('new','fa-user-plus','No match found. Fill in the details below to <strong>register a new guest</strong>.');
     document.getElementById('submitBtnText').textContent = 'Register & Check-In';
-    showGiftBanner(false);
   }
 }
 
@@ -1024,7 +1013,6 @@ function searchByOrg() {
     matchedGuest = null;
     setBanner('new','fa-user-plus','No pending guest found for that organisation. Register as new below.');
     document.getElementById('submitBtnText').textContent = 'Register & Check-In';
-    showGiftBanner(false);
   }
 }
 
@@ -1040,11 +1028,12 @@ function populateFormFromGuest(g) {
   setField('fieldRemark', g.Remark || g.remark || '');
   setField('fieldArrival', g.ArrivalTime || g['Arrival Time'] || g.arrivalTime || '');
 
-  setBanner('found','fa-circle-check',`<strong>${escHtml(getGuestName(g))}</strong> found. Review details and click Check-In.`);
+  // Build banner text — embed a small gift pill inline if applicable (staff-facing, subtle)
+  const giftPill = isGiftApplicable(g)
+    ? `<span class="gift-indicator"><i class="fa-solid fa-gift"></i> Gift Eligible</span>`
+    : '';
+  setBanner('found','fa-circle-check',`<strong>${escHtml(getGuestName(g))}</strong> found. Review details and click Check-In.${giftPill}`);
   document.getElementById('submitBtnText').textContent = 'Complete Check-In';
-
-  // Show/hide gift banner
-  showGiftBanner(isGiftApplicable(g));
 }
 
 function setBanner(type, icon, html) {
@@ -1126,9 +1115,9 @@ async function submitCheckIn() {
   updateDashboard();
 
   const giftNote = giftApplicable === 'Yes'
-    ? ' <strong>🎁 Gift bag issued!</strong>'
+    ? ' <span style="color:var(--gold);font-weight:700">🎁 Gift bag at exit</span>'
     : '';
-  const syncNote = synced ? '' : ' <em>(Saved locally — sheet sync pending)</em>';
+  const syncNote = synced ? '' : ' <em style="opacity:0.75">(Saved locally)</em>';
   showStatus(`✓ Check-in successful for <strong>${escHtml(name)}</strong> at ${arrivalTime}.${giftNote}${syncNote}`, 'success', 7000);
 
   setTimeout(() => {
