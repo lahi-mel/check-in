@@ -138,12 +138,15 @@ body {
 /* ===== MAIN CARD ===== */
 .main-card {
   background: var(--white); border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg); border: 1px solid rgba(180,148,80,0.12); overflow: hidden;
+  box-shadow: var(--shadow-lg); border: 1px solid rgba(180,148,80,0.12);
+  overflow: visible; /* allow dropdown to escape card bounds */
 }
+/* Header still needs its own clip for the decorative circles */
 .card-header {
   padding: 20px 30px;
   background: linear-gradient(135deg, #3b2a14 0%, #6b4e28 100%);
   display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 .card-header::before {
   content: ''; position: absolute; top: -30px; right: -30px; width: 130px; height: 130px;
@@ -195,10 +198,10 @@ body {
 
 /* ===== AUTOCOMPLETE ===== */
 .autocomplete-dropdown {
-  position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+  position: fixed; /* fixed escapes ALL parent overflow/stacking contexts */
   background: var(--white); border: 1.5px solid var(--gold);
   border-radius: var(--radius-md); box-shadow: var(--shadow-lg);
-  z-index: 200; max-height: 360px; overflow-y: auto; display: none;
+  z-index: 9999; max-height: 360px; overflow-y: auto; display: none;
   animation: dropIn 0.15s ease;
 }
 @keyframes dropIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
@@ -544,7 +547,9 @@ body {
 //  CONFIGURATION — must match index.html values
 // ============================================================
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyqB6xozycM00fhPfEPm9Po7C0144gJe0n3v8Ff464wKtuYtqinuOIfMpxPweCOciPD/exec';
-const SHEET_CSV_URL   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQppAQITDVf3sWVrwF_yxWdfhGXar9lW6ZPj7SMybS2BE2Qltp8hExEamHfSVggFiKuravuStfIauNE/pub?output=csv';// ============================================================
+const SHEET_CSV_URL   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQppAQITDVf3sWVrwF_yxWdfhGXar9lW6ZPj7SMybS2BE2Qltp8hExEamHfSVggFiKuravuStfIauNE/pub?output=csv';
+
+// ============================================================
 
 const LOCAL_KEY      = 'lahi_checkin_log';   // shared with index.html
 const GIFT_LOG_KEY   = 'lahi_gift_log';       // gift page's own log
@@ -663,22 +668,41 @@ function refreshAll() {
 }
 
 // ─── Autocomplete ─────────────────────────────────────────────
+
+// Because the dropdown is position:fixed we must set its coordinates from JS
+function positionDropdown() {
+  const input = document.getElementById('giftSearchInput');
+  const dd    = document.getElementById('giftDropdown');
+  const rect  = input.getBoundingClientRect();
+  dd.style.top   = (rect.bottom + 6) + 'px';
+  dd.style.left  = rect.left + 'px';
+  dd.style.width = rect.width + 'px';
+}
+
+// Re-position on scroll or resize so it never drifts
+window.addEventListener('scroll', () => {
+  if (document.getElementById('giftDropdown').classList.contains('open')) positionDropdown();
+}, true);
+window.addEventListener('resize', () => {
+  if (document.getElementById('giftDropdown').classList.contains('open')) positionDropdown();
+});
+
 document.getElementById('giftSearchInput').addEventListener('input', function() {
   const q = this.value.trim().toLowerCase();
   const dd = document.getElementById('giftDropdown');
   if (!q) { dd.classList.remove('open'); return; }
 
+  // No cap — show all matching eligible guests
   const matches = eligibleList.filter(g => {
     const name = (g.Name||'').toLowerCase();
     return name.split(/\s+/).some(w=>w.startsWith(q)) || name.includes(q);
-  }).slice(0, 12);
+  });
 
   if (!matches.length) {
-    // Check if person exists but gift already given or not eligible
     dd.innerHTML = `<div class="dropdown-empty">
       <i class="fa-solid fa-circle-xmark" style="color:var(--error);margin-right:6px"></i>
       No pending gift guest found<br>
-      <span style="font-size:11px;margin-top:4px;display:block">They may have already received their gift, not checked in, or not gift-eligible</span>
+      <span style="font-size:11px;margin-top:4px;display:block">They may have already received their gift, not checked in today, or are not gift-eligible</span>
     </div>`;
   } else {
     const qRaw = this.value.trim();
@@ -698,6 +722,7 @@ document.getElementById('giftSearchInput').addEventListener('input', function() 
       </div>`;
     }).join('');
   }
+  positionDropdown();
   dd.classList.add('open');
 });
 
