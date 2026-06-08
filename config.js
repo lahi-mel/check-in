@@ -8,7 +8,7 @@
 // Deploy via: Apps Script → Deploy → New deployment → Web App
 // Execute as: Me  |  Who has access: Anyone
 // NOTE: All live data sync goes through this URL — it's the single source of truth.
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBrmcn1JpKxzElNRFyKrP17yuMkoQKZY_rHbLMG5-TTxjdNH_T_a0wl2R5aHm6Xqc4/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzpTKK8yNtA34HZJ7m6wmlMuuwGZjuRRUmKsbs_XL-G3_V3C_euK9mhhUpsEqGh2rTW/exec';
 
 // Your Google Sheet "Publish to web" CSV URL
 // Still needed as a fallback reference — keep it updated.
