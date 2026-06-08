@@ -591,32 +591,6 @@ function doExportCsv() {
   dismissModal('exportModal');
 }
 
-// ─── CSV Parser ───────────────────────────────────────────────
-function parseCsv(text) {
-  const lines = [];
-  for (const row of text.split(/\r?\n/)) {
-    if (!row.trim()) continue;
-    const cols = []; let cur = '', inQ = false;
-    for (let i = 0; i < row.length; i++) {
-      const ch = row[i];
-      if (ch==='"') { if (inQ && row[i+1]==='"') { cur+='"'; i++; } else inQ=!inQ; }
-      else if (ch===',' && !inQ) { cols.push(cur); cur=''; }
-      else cur+=ch;
-    }
-    cols.push(cur); lines.push(cols);
-  }
-  return lines;
-}
-function buildGuestList(rows) {
-  if (rows.length < 2) return [];
-  const headers = rows[0].map(h => h.trim());
-  return rows.slice(1).map((cols, idx) => {
-    const obj = { _rowIndex: idx + 2 };
-    headers.forEach((h,i) => obj[h] = (cols[i]||'').trim());
-    return obj;
-  }).filter(g => g.Name || g.name);
-}
-
 // ─── Dashboard ────────────────────────────────────────────────
 function updateDashboard() {
   const checkedIn = guestList.filter(isCheckedInToday).length;
@@ -638,25 +612,29 @@ function animNum(id, target) {
   })(performance.now());
 }
 
-// ─── Fetch with CORS proxy fallback ───────────────────────────
-const PROXIES = [
-  u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
-  u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-];
-async function fetchCsv(url) {
-  // Try direct first
-  try {
-    const r = await fetch(url, { redirect:'follow' });
-    if (r.ok) { const t=await r.text(); if(!t.trim().startsWith('<!')) return t; }
-  } catch(e) {}
-  // Try proxies
-  for (const proxy of PROXIES) {
-    try {
-      const r = await fetch(proxy(url));
-      if (r.ok) { const t=await r.text(); if(!t.trim().startsWith('<!')) return t; }
-    } catch(e) {}
-  }
-  throw new Error('Could not fetch CSV. Check sheet is published to web.');
+// ─── Fetch guests via Apps Script (never cached, always live) ─
+// This replaces CSV fetch — Apps Script returns fresh JSON every call
+async function fetchGuests() {
+  const url = APPS_SCRIPT_URL + '?action=getGuests&t=' + Date.now();
+  const r = await fetch(url);
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  const data = await r.json();
+  if (!Array.isArray(data)) throw new Error('Unexpected response from Apps Script');
+  // Normalise: script already sets rowIndex on each guest
+  return data.map(g => ({
+    ...g,
+    // Ensure string values (sheet may return numbers/dates as JS types)
+    Name:            String(g.Name || g.name || '').trim(),
+    Organisation:    String(g.Organisation || g.organization || '').trim(),
+    Designation:     String(g.Designation  || g.designation  || '').trim(),
+    Email:           String(g.Email  || g.email  || '').trim(),
+    Mobile:          String(g.Mobile || g.mobile || '').trim(),
+    Remark:          String(g.Remark || g.remark || '').trim(),
+    ArrivalTime:     String(g.ArrivalTime || g['Arrival Time'] || '').trim(),
+    gift_applicable: String(g.gift_applicable || g.Gift_Applicable || '').trim(),
+    GiftGivenAt:     String(g.GiftGivenAt || g.giftGivenAt || '').trim(),
+    _rowIndex:       g.rowIndex != null ? g.rowIndex : g._rowIndex,
+  })).filter(g => g.Name);
 }
 
 // ─── Sync status UI ───────────────────────────────────────────
@@ -685,20 +663,17 @@ function startCountdown() {
 async function loadGuestData(silent = false) {
   if (!silent) {
     document.getElementById('loadingOverlay').classList.add('active');
-    document.getElementById('loadingSubText').textContent = 'Connecting to Google Sheets…';
+    document.getElementById('loadingSubText').textContent = 'Connecting to Apps Script…';
   }
 
-  if (SHEET_CSV_URL.includes('YOUR_SHEET_ID')) {
+  if (APPS_SCRIPT_URL.includes('YOUR_DEPLOYMENT_ID')) {
     if (!silent) document.getElementById('loadingOverlay').classList.remove('active');
-    setSyncStatus('warn', '⚠ Set SHEET_CSV_URL to enable cross-tablet sync');
+    setSyncStatus('warn', '⚠ Set APPS_SCRIPT_URL in config.js to enable live sync');
     updateDashboard(); return;
   }
 
   try {
-    const url = SHEET_CSV_URL + (SHEET_CSV_URL.includes('?')? '&':'?') + 't=' + Date.now();
-    const text = await fetchCsv(url);
-    const rows = parseCsv(text);
-    guestList = buildGuestList(rows);
+    guestList = await fetchGuests();
     console.log('[Kiosk] Synced', guestList.length, 'guests at', new Date().toLocaleTimeString());
     updateDashboard();
     const now = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
@@ -707,7 +682,7 @@ async function loadGuestData(silent = false) {
     if (isFirstLoad) { isFirstLoad = false; document.getElementById('sheetErrorModal').classList.remove('active'); }
   } catch(err) {
     console.error('[Kiosk] Sync failed:', err.message);
-    setSyncStatus('warn', '⚠ Sync failed — data may be stale across tablets');
+    setSyncStatus('warn', '⚠ Sync failed — data may be stale. Check Apps Script URL.');
     if (isFirstLoad) { isFirstLoad=false; showSheetErrorModal(err.message); }
     updateDashboard();
   } finally {
@@ -904,11 +879,9 @@ async function submitCheckIn() {
   btn.disabled = true; btn.classList.add('loading'); hideStatus();
   document.getElementById('submitBtnText').textContent = 'Verifying…';
 
-  // ── STEP 1: Re-fetch the sheet right now to catch same-second duplicate from another tablet
+  // ── STEP 1: Re-fetch live from Apps Script to catch same-second duplicate from another tablet
   try {
-    const url = SHEET_CSV_URL + (SHEET_CSV_URL.includes('?')? '&':'?') + 't=' + Date.now();
-    const text = await fetchCsv(url);
-    guestList = buildGuestList(parseCsv(text));
+    guestList = await fetchGuests();
   } catch(e) { console.warn('[Kiosk] Pre-check fetch failed, proceeding with cached data'); }
 
   // ── STEP 2: Conflict check — is this guest already in the sheet with an ArrivalTime today?
