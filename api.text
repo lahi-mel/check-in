@@ -1,7 +1,0 @@
-// ============================================================
-//  CONFIGURATION — Replace with your own values
-// ============================================================
-//const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyqB6xozycM00fhPfEPm9Po7C0144gJe0n3v8Ff464wKtuYtqinuOIfMpxPweCOciPD/exec';
-//const SHEET_CSV_URL   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQppAQITDVf3sWVrwF_yxWdfhGXar9lW6ZPj7SMybS2BE2Qltp8hExEamHfSVggFiKuravuStfIauNE/pub?output=csv';
-// Use File → Share → Publish to web → CSV  (NOT the /export?format=csv URL)
-// ============================================================
