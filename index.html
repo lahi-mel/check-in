@@ -6,58 +6,34 @@
 <title>LAHI 20 Years • Event Check-In</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- Central config — edit config.js only, never touch this file for URL changes -->
+<script src="config.js"></script>
 <style>
-/* ===== VARIABLES ===== */
 :root {
-  --cream: #f5efe8;
-  --cream-dark: #ede4d8;
-  --cream-deeper: #e0d4c3;
-  --gold: #b49450;
-  --gold-light: #d4af37;
-  --gold-bright: #f0c84a;
-  --gold-pale: #f7e8be;
-  --brown-dark: #4a3720;
-  --brown-mid: #7a5c38;
-  --brown-light: #a07848;
-  --white: #ffffff;
-  --text-primary: #2d1f0f;
-  --text-secondary: #6b4f30;
-  --text-muted: #9e7d58;
-  --success: #2d7a4f;
-  --success-bg: #e8f5ed;
-  --error: #a0342a;
-  --error-bg: #faeae9;
-  --shadow-sm: 0 2px 8px rgba(74,55,32,0.08);
-  --shadow-md: 0 4px 20px rgba(74,55,32,0.12);
+  --cream: #f5efe8; --cream-dark: #ede4d8; --cream-deeper: #e0d4c3;
+  --gold: #b49450; --gold-light: #d4af37; --gold-bright: #f0c84a; --gold-pale: #f7e8be;
+  --brown-dark: #4a3720; --brown-mid: #7a5c38; --brown-light: #a07848;
+  --white: #ffffff; --text-primary: #2d1f0f; --text-secondary: #6b4f30; --text-muted: #9e7d58;
+  --success: #2d7a4f; --success-bg: #e8f5ed; --error: #a0342a; --error-bg: #faeae9;
+  --shadow-sm: 0 2px 8px rgba(74,55,32,0.08); --shadow-md: 0 4px 20px rgba(74,55,32,0.12);
   --shadow-lg: 0 8px 40px rgba(74,55,32,0.18);
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-xl: 32px;
+  --radius-sm: 10px; --radius-md: 16px; --radius-lg: 24px; --radius-xl: 32px;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 body {
-  font-family: 'Outfit', sans-serif;
-  background: var(--cream);
-  color: var(--text-primary);
-  min-height: 100vh;
-  background-image:
-    radial-gradient(ellipse at 20% 0%, rgba(212,175,55,0.12) 0%, transparent 50%),
+  font-family: 'Outfit', sans-serif; background: var(--cream); color: var(--text-primary); min-height: 100vh;
+  background-image: radial-gradient(ellipse at 20% 0%, rgba(212,175,55,0.12) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 100%, rgba(180,148,80,0.10) 0%, transparent 50%),
     url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23b49450' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
-
 .page-wrapper { max-width: 980px; margin: 0 auto; padding: 24px 20px 56px; }
 
-/* ===== HEADER ===== */
+/* HEADER */
 .header {
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  margin-bottom: 28px; padding: 20px 28px;
-  background: var(--white); border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md); border: 1px solid rgba(180,148,80,0.15);
-  position: relative; overflow: hidden;
+  margin-bottom: 28px; padding: 20px 28px; background: var(--white);
+  border-radius: var(--radius-xl); box-shadow: var(--shadow-md);
+  border: 1px solid rgba(180,148,80,0.15); position: relative; overflow: hidden;
 }
 .header::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
@@ -65,9 +41,8 @@ body {
 }
 .header-logos { display: flex; gap: 16px; align-items: center; }
 .logo-container {
-  background: var(--white); border: 1.5px solid var(--cream-deeper);
-  border-radius: var(--radius-md); padding: 10px 16px;
-  display: flex; align-items: center; justify-content: center;
+  background: var(--white); border: 1.5px solid var(--cream-deeper); border-radius: var(--radius-md);
+  padding: 10px 16px; display: flex; align-items: center; justify-content: center;
   min-width: 80px; min-height: 56px; box-shadow: var(--shadow-sm);
 }
 .logo-container img { max-height: 44px; max-width: 120px; object-fit: contain; }
@@ -76,42 +51,69 @@ body {
 .event-title { font-family: 'Playfair Display', serif; font-size: clamp(18px,3vw,26px); font-weight: 700; color: var(--brown-dark); line-height: 1.2; }
 .event-subtitle { font-size: 13px; color: var(--text-muted); font-weight: 400; margin-top: 4px; letter-spacing: 0.05em; text-transform: uppercase; }
 .years-badge {
-  display: inline-flex; align-items: center; gap: 6px; margin-top: 10px;
-  padding: 5px 14px; background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold-bright));
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 5px 14px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold-bright));
   border-radius: 50px; color: var(--brown-dark); font-size: 11px; font-weight: 700;
   letter-spacing: 0.08em; text-transform: uppercase; box-shadow: 0 2px 10px rgba(212,175,55,0.4);
 }
 
-/* ===== TOP ACTION BAR ===== */
-.top-action-bar {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 12px; margin-bottom: 16px; flex-wrap: wrap;
+/* TOP ACTION BAR */
+.top-action-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+
+/* SYNC STATUS BAR — combines sheet status + live pulse */
+.sync-bar {
+  display: flex; align-items: center; gap: 10px; padding: 9px 16px;
+  border-radius: var(--radius-md); font-size: 13px; font-weight: 500; flex: 1; min-width: 0;
+  background: var(--success-bg); border: 1px solid rgba(45,122,79,0.2); color: var(--success);
 }
-.sheet-status-bar {
-  display: none; align-items: center; gap: 10px;
-  padding: 9px 16px; border-radius: var(--radius-md);
-  font-size: 13px; font-weight: 500; flex: 1; min-width: 0;
+.sync-bar.warn { background: #fff3cd; border-color: rgba(184,134,11,0.25); color: #7a5800; }
+.sync-bar.offline { background: var(--error-bg); border-color: rgba(160,52,42,0.2); color: var(--error); }
+.sync-bar .status-txt { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Live pulse dot */
+.sync-pulse {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--success);
+  flex-shrink: 0; box-shadow: 0 0 0 0 rgba(45,122,79,0.4);
+  animation: pulse-ring 2s ease-out infinite;
 }
-.sheet-status-bar.ok  { display: flex; background: var(--success-bg); border: 1px solid rgba(45,122,79,0.2); color: var(--success); }
-.sheet-status-bar.warn{ display: flex; background: #fff3cd; border: 1px solid rgba(184,134,11,0.25); color: #7a5800; }
-.sheet-status-bar .status-txt { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sync-pulse.warn { background: #d4a017; box-shadow: 0 0 0 0 rgba(212,160,23,0.4); }
+.sync-pulse.offline { background: var(--error); box-shadow: none; animation: none; }
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(45,122,79,0.5); }
+  70%  { box-shadow: 0 0 0 6px rgba(45,122,79,0); }
+  100% { box-shadow: 0 0 0 0 rgba(45,122,79,0); }
+}
+
+/* Countdown timer */
+.sync-countdown { font-size: 11px; opacity: 0.7; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+
 .sheet-retry-btn {
   padding: 4px 12px; background: rgba(0,0,0,0.08); border: none; border-radius: 50px;
   font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer;
-  color: inherit; display: flex; align-items: center; gap: 5px; transition: background 0.15s; flex-shrink: 0;
+  color: inherit; display: none; align-items: center; gap: 5px; transition: background 0.15s; flex-shrink: 0;
 }
+.sheet-retry-btn.visible { display: flex; }
 .sheet-retry-btn:hover { background: rgba(0,0,0,0.14); }
 
+.top-btns { display: flex; gap: 10px; flex-shrink: 0; flex-wrap: wrap; }
 .export-btn {
   padding: 10px 18px; background: linear-gradient(135deg, var(--brown-dark), var(--brown-mid));
   color: var(--white); border: none; border-radius: var(--radius-md);
   font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700;
   cursor: pointer; display: flex; align-items: center; gap: 8px;
-  box-shadow: 0 2px 10px rgba(74,55,32,0.25); transition: all 0.2s; white-space: nowrap; flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(74,55,32,0.25); transition: all 0.2s; white-space: nowrap;
 }
 .export-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(74,55,32,0.35); }
+.gift-desk-btn {
+  padding: 10px 18px; background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--brown-dark); border: none; border-radius: var(--radius-md);
+  font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; gap: 8px; text-decoration: none;
+  box-shadow: 0 2px 10px rgba(180,148,80,0.3); transition: all 0.2s; white-space: nowrap;
+}
+.gift-desk-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(180,148,80,0.4); }
 
-/* ===== STATS ===== */
+/* STATS */
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 24px; }
 .stat-card {
   background: var(--white); border-radius: var(--radius-lg); padding: 20px 22px;
@@ -134,26 +136,19 @@ body {
 .stat-number { font-size: clamp(24px,3.5vw,34px); font-weight: 800; color: var(--brown-dark); line-height: 1; font-variant-numeric: tabular-nums; }
 .stat-label { font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; margin-top: 4px; }
 
-/* ===== MAIN CARD ===== */
+/* MAIN CARD */
 .main-card { background: var(--white); border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); border: 1px solid rgba(180,148,80,0.12); overflow: hidden; }
 .card-header {
   padding: 20px 32px; background: linear-gradient(135deg, var(--brown-dark) 0%, var(--brown-mid) 100%);
   display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden;
 }
-.card-header::before {
-  content: ''; position: absolute; top: -30px; right: -30px; width: 120px; height: 120px;
-  border-radius: 50%; background: rgba(212,175,55,0.15);
-}
-.card-header-icon {
-  width: 42px; height: 42px; border-radius: var(--radius-sm);
-  background: rgba(212,175,55,0.2); display: flex; align-items: center; justify-content: center;
-  font-size: 18px; color: var(--gold-light); flex-shrink: 0;
-}
+.card-header::before { content: ''; position: absolute; top: -30px; right: -30px; width: 120px; height: 120px; border-radius: 50%; background: rgba(212,175,55,0.15); }
+.card-header-icon { width: 42px; height: 42px; border-radius: var(--radius-sm); background: rgba(212,175,55,0.2); display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--gold-light); flex-shrink: 0; }
 .card-header h2 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 600; color: var(--white); }
 .card-header p { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 1px; }
 .card-body { padding: 28px 32px; }
 
-/* ===== SEARCH ===== */
+/* SEARCH */
 .search-section { margin-bottom: 22px; }
 .search-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 8px; display: block; }
 .search-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
@@ -168,17 +163,14 @@ body {
 .search-panel.active { display: block; }
 .search-row { display: flex; gap: 10px; }
 .search-input-wrap { position: relative; flex: 1; }
-.search-input-wrap > i.si-icon {
-  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-  color: var(--text-muted); font-size: 14px; pointer-events: none;
-}
+.search-input-wrap > i.si-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px; pointer-events: none; }
 .search-input {
-  width: 100%; padding: 13px 14px 13px 40px;
-  border: 1.5px solid var(--cream-deeper); border-radius: var(--radius-md);
+  width: 100%; padding: 13px 14px 13px 40px; border: 1.5px solid var(--cream-deeper); border-radius: var(--radius-md);
   font-family: 'Outfit', sans-serif; font-size: 15px; color: var(--text-primary);
   background: var(--cream); outline: none; transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 }
 .search-input:focus { border-color: var(--gold); background: var(--white); box-shadow: 0 0 0 3px rgba(180,148,80,0.12); }
+.search-input::placeholder { color: var(--text-muted); opacity: 0.7; }
 .btn-search {
   padding: 13px 22px; background: linear-gradient(135deg, var(--gold), var(--gold-light));
   color: var(--brown-dark); border: none; border-radius: var(--radius-md);
@@ -188,75 +180,42 @@ body {
 }
 .btn-search:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(180,148,80,0.4); }
 
-/* ===== AUTOCOMPLETE DROPDOWN ===== */
+/* DROPDOWN */
 .autocomplete-dropdown {
   position: absolute; top: calc(100% + 6px); left: 0; right: 0;
-  background: var(--white); border: 1.5px solid var(--gold);
-  border-radius: var(--radius-md); box-shadow: var(--shadow-lg);
-  z-index: 200; max-height: 280px; overflow-y: auto; display: none;
+  background: var(--white); border: 1.5px solid var(--gold); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg); z-index: 200; max-height: 320px; overflow-y: auto; display: none;
   animation: dropIn 0.15s ease;
 }
 @keyframes dropIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
 .autocomplete-dropdown.open { display: block; }
-
-.autocomplete-dropdown { max-height: 320px; }
-
-.dropdown-item {
-  padding: 10px 16px; cursor: pointer;
-  border-bottom: 1px solid var(--cream-dark); transition: background 0.12s;
-}
+.dropdown-item { padding: 10px 16px; cursor: pointer; border-bottom: 1px solid var(--cream-dark); transition: background 0.12s; }
 .dropdown-item:last-child { border-bottom: none; }
 .dropdown-item:hover { background: var(--gold-pale); }
-
-/* Top row: full name text + small badges pushed right */
-.dropdown-item-row {
-  display: flex; align-items: center; gap: 8px;
-}
-/* The name text itself — never wraps, never gets cut by a badge */
-.dropdown-item-name-text {
-  font-size: 14px; font-weight: 600; color: var(--text-primary);
-  flex: 1; min-width: 0;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
+.dropdown-item-row { display: flex; align-items: center; gap: 8px; }
+.dropdown-item-name-text { font-size: 14px; font-weight: 600; color: var(--text-primary); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dropdown-item-name-text mark { background: none; color: var(--gold); font-weight: 800; }
 .dropdown-item-badges { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
 .dropdown-item-meta { font-size: 11px; color: var(--text-muted); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dropdown-empty { padding: 14px 16px; font-size: 13px; color: var(--text-muted); text-align: center; font-style: italic; }
+.dd-checked-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 50px; font-size: 10px; font-weight: 700; background: var(--success-bg); color: var(--success); border: 1px solid rgba(45,122,79,0.2); white-space: nowrap; }
+.dd-gift-badge { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 50px; font-size: 10px; font-weight: 700; background: linear-gradient(135deg, #fff3cd, #ffeaa0); color: #7a5800; border: 1px solid rgba(184,134,11,0.3); white-space: nowrap; }
 
-/* Badges */
-.dd-checked-badge {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 2px 7px; border-radius: 50px; font-size: 10px; font-weight: 700;
-  background: var(--success-bg); color: var(--success); border: 1px solid rgba(45,122,79,0.2);
-  white-space: nowrap;
-}
-.dd-gift-badge {
-  display: inline-flex; align-items: center; gap: 3px;
-  padding: 2px 7px; border-radius: 50px; font-size: 10px; font-weight: 700;
-  background: linear-gradient(135deg, #fff3cd, #ffeaa0); color: #7a5800;
-  border: 1px solid rgba(184,134,11,0.3); white-space: nowrap;
-}
-
-/* ===== GUEST BANNER ===== */
-.guest-banner {
-  display: none; align-items: center; gap: 12px; padding: 12px 18px;
-  border-radius: var(--radius-md); margin-bottom: 20px; font-size: 14px; font-weight: 500;
-}
+/* GUEST BANNER */
+.guest-banner { display: none; align-items: center; gap: 12px; padding: 12px 18px; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 14px; font-weight: 500; }
 .guest-banner.found { display: flex; background: var(--success-bg); border: 1px solid rgba(45,122,79,0.2); color: var(--success); }
 .guest-banner.new   { display: flex; background: var(--gold-pale); border: 1px solid rgba(180,148,80,0.3); color: var(--brown-mid); }
 .guest-banner.warn  { display: flex; background: #fff3cd; border: 1px solid rgba(184,134,11,0.25); color: #7a5800; }
+.guest-banner.conflict { display: flex; background: var(--error-bg); border: 1.5px solid rgba(160,52,42,0.3); color: var(--error); }
 
-/* ===== GIFT INDICATOR (inline in guest banner — subtle, staff-only) ===== */
+/* GIFT INDICATOR */
 .gift-indicator {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 3px 10px; border-radius: 50px; margin-left: 8px;
-  background: linear-gradient(135deg, var(--gold), var(--gold-light));
-  color: var(--brown-dark); font-size: 11px; font-weight: 700;
-  box-shadow: 0 1px 6px rgba(180,148,80,0.35); vertical-align: middle;
-  white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 50px; margin-left: 8px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--brown-dark);
+  font-size: 11px; font-weight: 700; box-shadow: 0 1px 6px rgba(180,148,80,0.35); vertical-align: middle; white-space: nowrap;
 }
 
-/* ===== FORM ===== */
+/* FORM */
 .form-divider { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
 .form-divider-line { flex: 1; height: 1px; background: var(--cream-deeper); }
 .form-divider-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); white-space: nowrap; }
@@ -273,21 +232,15 @@ body {
 .form-input::placeholder { color: var(--text-muted); opacity: 0.7; }
 .form-input[readonly] { background: var(--cream-dark); color: var(--text-muted); cursor: default; border-color: transparent; }
 
-/* ===== SUBMIT ===== */
+/* SUBMIT */
 .btn-submit {
-  width: 100%; padding: 15px 24px;
-  background: linear-gradient(135deg, var(--brown-dark) 0%, var(--brown-mid) 100%);
-  color: var(--white); border: none; border-radius: var(--radius-md);
-  font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  transition: all 0.25s; letter-spacing: 0.03em; position: relative; overflow: hidden;
+  width: 100%; padding: 15px 24px; background: linear-gradient(135deg, var(--brown-dark) 0%, var(--brown-mid) 100%);
+  color: var(--white); border: none; border-radius: var(--radius-md); font-family: 'Outfit', sans-serif;
+  font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  gap: 10px; transition: all 0.25s; letter-spacing: 0.03em; position: relative; overflow: hidden;
   box-shadow: 0 4px 16px rgba(74,55,32,0.3);
 }
-.btn-submit::before {
-  content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-  transition: left 0.5s;
-}
+.btn-submit::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); transition: left 0.5s; }
 .btn-submit:hover:not(:disabled)::before { left: 100%; }
 .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(74,55,32,0.35); }
 .btn-submit:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
@@ -295,35 +248,24 @@ body {
 .btn-submit.loading .btn-spinner { display: block; }
 .btn-submit.loading .btn-icon { display: none; }
 
-/* ===== STATUS MESSAGE ===== */
+/* STATUS */
 .status-message { display: none; align-items: center; gap: 10px; padding: 13px 18px; border-radius: var(--radius-md); margin-top: 14px; font-size: 14px; font-weight: 500; animation: slideIn 0.3s ease; }
 @keyframes slideIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
 .status-message.success { display: flex; background: var(--success-bg); border: 1px solid rgba(45,122,79,0.2); color: var(--success); }
 .status-message.error   { display: flex; background: var(--error-bg); border: 1px solid rgba(160,52,42,0.2); color: var(--error); }
 
-/* ===== LOADING OVERLAY ===== */
-.loading-overlay {
-  display: none; position: fixed; inset: 0; background: rgba(245,239,232,0.88);
-  backdrop-filter: blur(6px); z-index: 1000; flex-direction: column;
-  align-items: center; justify-content: center; gap: 20px;
-}
+/* LOADING OVERLAY */
+.loading-overlay { display: none; position: fixed; inset: 0; background: rgba(245,239,232,0.88); backdrop-filter: blur(6px); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
 .loading-overlay.active { display: flex; }
 .spinner { width: 52px; height: 52px; border: 4px solid rgba(180,148,80,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .loading-text { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--brown-dark); font-weight: 600; }
 .loading-sub { font-size: 13px; color: var(--text-muted); margin-top: -12px; }
 
-/* ===== ERROR MODAL ===== */
-.modal-overlay {
-  display: none; position: fixed; inset: 0; background: rgba(45,31,15,0.55);
-  backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 20px;
-}
+/* MODALS */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(45,31,15,0.55); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
 .modal-overlay.active { display: flex; }
-.modal-card {
-  background: var(--white); border-radius: var(--radius-xl); padding: 36px 32px 28px;
-  max-width: 520px; width: 100%; box-shadow: 0 24px 80px rgba(45,31,15,0.4);
-  border: 1px solid rgba(180,148,80,0.2); animation: modalPop 0.3s cubic-bezier(0.34,1.56,0.64,1);
-}
+.modal-card { background: var(--white); border-radius: var(--radius-xl); padding: 36px 32px 28px; max-width: 520px; width: 100%; box-shadow: 0 24px 80px rgba(45,31,15,0.4); border: 1px solid rgba(180,148,80,0.2); animation: modalPop 0.3s cubic-bezier(0.34,1.56,0.64,1); }
 @keyframes modalPop { from { opacity:0; transform:scale(0.92) translateY(16px); } to { opacity:1; transform:scale(1) translateY(0); } }
 .modal-icon { width: 56px; height: 56px; border-radius: var(--radius-md); background: #fff3cd; border: 1.5px solid #f0c84a; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #b8860b; margin-bottom: 16px; }
 .modal-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--brown-dark); margin-bottom: 8px; }
@@ -335,21 +277,21 @@ body {
 .modal-error-detail { font-size: 12px; color: var(--error); background: var(--error-bg); border: 1px solid rgba(160,52,42,0.15); border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 20px; font-family: monospace; word-break: break-all; display: none; }
 .modal-error-detail.visible { display: block; }
 .modal-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-.modal-btn-retry { flex: 1; padding: 12px 18px; background: linear-gradient(135deg, var(--brown-dark), var(--brown-mid)); color: var(--white); border: none; border-radius: var(--radius-md); font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
-.modal-btn-retry:hover { transform: translateY(-1px); }
-.modal-btn-dismiss { padding: 12px 18px; background: transparent; color: var(--text-muted); border: 1.5px solid var(--cream-deeper); border-radius: var(--radius-md); font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
-.modal-btn-dismiss:hover { background: var(--cream-dark); color: var(--text-secondary); }
-
-/* ===== EXPORT MODAL ===== */
+.modal-btn-primary { flex: 1; padding: 12px 18px; background: linear-gradient(135deg, var(--brown-dark), var(--brown-mid)); color: var(--white); border: none; border-radius: var(--radius-md); font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
+.modal-btn-primary:hover { transform: translateY(-1px); }
+.modal-btn-secondary { padding: 12px 18px; background: transparent; color: var(--text-muted); border: 1.5px solid var(--cream-deeper); border-radius: var(--radius-md); font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
+.modal-btn-secondary:hover { background: var(--cream-dark); color: var(--text-secondary); }
 .export-modal-card { max-width: 440px; }
 .export-info { font-size: 13px; color: var(--text-secondary); background: var(--cream); border-radius: var(--radius-sm); padding: 12px 16px; margin-bottom: 20px; line-height: 1.6; }
-.export-info strong { color: var(--brown-dark); }
 .export-stat { display: inline-block; background: var(--gold-pale); border-radius: 6px; padding: 2px 10px; font-weight: 700; color: var(--brown-mid); margin: 0 2px; }
 
-/* ===== ORNAMENT ===== */
+/* Google Sheets column guide box */
+.sheet-guide { background: var(--cream); border: 1px solid var(--cream-deeper); border-radius: var(--radius-sm); padding: 14px 16px; margin-top: 14px; font-size: 12px; color: var(--text-secondary); line-height: 1.8; }
+.sheet-guide strong { color: var(--brown-dark); }
+.sheet-guide code { background: var(--white); border: 1px solid var(--cream-deeper); padding: 1px 6px; border-radius: 4px; font-size: 11px; color: var(--brown-mid); font-family: monospace; }
+
 .ornament { text-align: center; color: var(--gold); font-size: 18px; letter-spacing: 8px; margin: 16px 0; opacity: 0.5; }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 640px) {
   .page-wrapper { padding: 14px 12px 36px; }
   .header { flex-wrap: wrap; justify-content: center; gap: 12px; padding: 16px 16px; }
@@ -360,6 +302,7 @@ body {
   .search-row { flex-direction: column; }
   .btn-search { justify-content: center; }
   .top-action-bar { flex-direction: column; align-items: stretch; }
+  .top-btns { flex-direction: row; }
 }
 @media (max-width: 400px) {
   .stats-grid { grid-template-columns: 1fr; }
@@ -381,17 +324,20 @@ body {
   <div class="modal-card">
     <div class="modal-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
     <h3 class="modal-title">Google Sheet Not Accessible</h3>
-    <p class="modal-desc">Could not load guest data. This is almost always a sheet permissions issue. Fix it in 4 steps:</p>
+    <p class="modal-desc">Could not load guest data. Fix in 3 steps so all 4 tablets can sync:</p>
     <ol class="modal-steps">
       <li><span class="step-num">1</span><div>Open your Google Sheet → <strong>File → Share → Publish to web</strong></div></li>
       <li><span class="step-num">2</span><div>Choose <strong>Entire Document</strong> + <strong>Comma-separated values (.csv)</strong> → click <strong>Publish</strong></div></li>
-      <li><span class="step-num">3</span><div>Copy the published URL and set it as <code>SHEET_CSV_URL</code> in the script</div></li>
-      <li><span class="step-num">4</span><div>Add a column header <code>gift_applicable</code> with values <strong>Yes</strong> or <strong>No</strong></div></li>
+      <li><span class="step-num">3</span><div>Paste the published URL as <code>SHEET_CSV_URL</code> in <code>config.js</code></div></li>
     </ol>
+    <div class="sheet-guide">
+      <strong>Required Google Sheet columns (exact headers):</strong><br>
+      <code>Name</code> &nbsp;·&nbsp; <code>Organisation</code> &nbsp;·&nbsp; <code>Designation</code> &nbsp;·&nbsp; <code>Email</code> &nbsp;·&nbsp; <code>Mobile</code> &nbsp;·&nbsp; <code>Remark</code> &nbsp;·&nbsp; <code>ArrivalTime</code> &nbsp;·&nbsp; <code>gift_applicable</code> &nbsp;·&nbsp; <code>GiftGivenAt</code>
+    </div>
     <div class="modal-error-detail" id="modalErrorDetail"></div>
-    <div class="modal-actions">
-      <button class="modal-btn-retry" onclick="retryLoad()"><i class="fa-solid fa-rotate-right"></i> Retry</button>
-      <button class="modal-btn-dismiss" onclick="dismissModal('sheetErrorModal')"><i class="fa-solid fa-xmark"></i> Continue Without Data</button>
+    <div class="modal-actions" style="margin-top:16px">
+      <button class="modal-btn-primary" onclick="retryLoad()"><i class="fa-solid fa-rotate-right"></i> Retry</button>
+      <button class="modal-btn-secondary" onclick="dismissModal('sheetErrorModal')"><i class="fa-solid fa-xmark"></i> Continue Offline</button>
     </div>
   </div>
 </div>
@@ -400,11 +346,11 @@ body {
 <div class="modal-overlay" id="exportModal">
   <div class="modal-card export-modal-card">
     <div class="modal-icon" style="background:linear-gradient(135deg,var(--gold-pale),rgba(212,175,55,0.2));border-color:var(--gold);color:var(--gold)"><i class="fa-solid fa-file-csv"></i></div>
-    <h3 class="modal-title">Export Check-In Data</h3>
+    <h3 class="modal-title">Export Local Backup</h3>
     <div class="export-info" id="exportInfo">Loading…</div>
     <div class="modal-actions">
-      <button class="modal-btn-retry" onclick="doExportCsv()"><i class="fa-solid fa-download"></i> Download CSV</button>
-      <button class="modal-btn-dismiss" onclick="dismissModal('exportModal')"><i class="fa-solid fa-xmark"></i> Cancel</button>
+      <button class="modal-btn-primary" onclick="doExportCsv()"><i class="fa-solid fa-download"></i> Download CSV</button>
+      <button class="modal-btn-secondary" onclick="dismissModal('exportModal')"><i class="fa-solid fa-xmark"></i> Cancel</button>
     </div>
   </div>
 </div>
@@ -415,7 +361,7 @@ body {
   <header class="header">
     <div class="header-logos">
       <div class="logo-container">
-        <img src="lahi-logo.png" alt="LAHI Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <img src="lahi-logo.png" alt="LAHI" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
         <div class="logo-fallback" style="display:none">LAHI</div>
       </div>
     </div>
@@ -426,7 +372,7 @@ body {
     </div>
     <div class="header-logos">
       <div class="logo-container">
-        <img src="lahi-20years-logo.png" alt="20 Years Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <img src="lahi-20years-logo.png" alt="20 Years" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
         <div class="logo-fallback" style="display:none">20<br>YEARS</div>
       </div>
     </div>
@@ -434,20 +380,19 @@ body {
 
   <!-- TOP ACTION BAR -->
   <div class="top-action-bar">
-    <div class="sheet-status-bar" id="sheetStatusBar">
-      <i id="sheetStatusIcon" class="fa-solid fa-circle-check"></i>
-      <span class="status-txt" id="sheetStatusText"></span>
-      <button class="sheet-retry-btn" onclick="retryLoad()" id="sheetRetryBtn" style="display:none">
-        <i class="fa-solid fa-rotate-right"></i> Retry
+    <!-- Live sync status bar -->
+    <div class="sync-bar" id="syncBar">
+      <div class="sync-pulse" id="syncPulse"></div>
+      <span class="status-txt" id="syncText">Connecting…</span>
+      <span class="sync-countdown" id="syncCountdown"></span>
+      <button class="sheet-retry-btn" id="retryBtn" onclick="manualRefresh()">
+        <i class="fa-solid fa-rotate-right"></i> Sync Now
       </button>
     </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;flex-shrink:0">
-      <a href="gift.html" style="padding:10px 18px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--brown-dark);border:none;border-radius:var(--radius-md);font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 2px 10px rgba(180,148,80,0.3);text-decoration:none;transition:all 0.2s" onmouseover="this.style.transform='translateY(-1px)'" onmouseout="this.style.transform=''">
-        <i class="fa-solid fa-gift"></i> Gift Desk
-      </a>
-      <button class="export-btn" onclick="openExportModal()">
-        <i class="fa-solid fa-file-arrow-down"></i> Export CSV
-      </button>
+    <!-- Buttons -->
+    <div class="top-btns">
+      <a href="gift.html" class="gift-desk-btn"><i class="fa-solid fa-gift"></i> Gift Desk</a>
+      <button class="export-btn" onclick="openExportModal()"><i class="fa-solid fa-file-arrow-down"></i> Export CSV</button>
     </div>
   </div>
 
@@ -471,7 +416,7 @@ body {
       <div class="stat-icon"><i class="fa-solid fa-gift"></i></div>
       <div class="stat-info">
         <div class="stat-number" id="statGifts">—</div>
-        <div class="stat-label">Gift Bags Issued</div>
+        <div class="stat-label">Gift Eligible</div>
       </div>
     </div>
   </div>
@@ -487,15 +432,13 @@ body {
     </div>
 
     <div class="card-body">
-
-      <!-- SEARCH -->
+      <!-- SEARCH TABS -->
       <div class="search-section">
         <label class="search-label"><i class="fa-solid fa-magnifying-glass" style="margin-right:5px;color:var(--gold)"></i>Search Guest</label>
         <div class="search-tabs">
           <button class="search-tab active" id="tabName" onclick="switchTab('name')"><i class="fa-solid fa-user"></i> By Name</button>
-          <button class="search-tab" id="tabOrg" onclick="switchTab('org')"><i class="fa-solid fa-building"></i> By Organisation</button>
+          <button class="search-tab" id="tabOrg"  onclick="switchTab('org')"><i class="fa-solid fa-building"></i> By Organisation</button>
         </div>
-
         <!-- Name panel -->
         <div class="search-panel active" id="panelName">
           <div class="search-row">
@@ -507,7 +450,6 @@ body {
             <button class="btn-search" onclick="searchGuest()"><i class="fa-solid fa-search"></i> Search</button>
           </div>
         </div>
-
         <!-- Org panel -->
         <div class="search-panel" id="panelOrg">
           <div class="search-row">
@@ -521,7 +463,7 @@ body {
         </div>
       </div>
 
-      <!-- GUEST BANNER (gift indicator embedded inline here by JS) -->
+      <!-- GUEST BANNER -->
       <div class="guest-banner" id="guestBanner">
         <i class="fa-solid fa-circle-check" id="guestBannerIcon"></i>
         <span id="guestBannerText"></span>
@@ -575,111 +517,79 @@ body {
         <i class="fa-solid fa-circle-info"></i>
         <span id="statusText"></span>
       </div>
-
     </div>
   </div>
 
   <div class="ornament">✦ ✦ ✦</div>
-
 </div>
 
 <script>
-// ============================================================
-//  CONFIGURATION — Replace with your own values
-// ============================================================
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyqB6xozycM00fhPfEPm9Po7C0144gJe0n3v8Ff464wKtuYtqinuOIfMpxPweCOciPD/exec';
-const SHEET_CSV_URL   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQppAQITDVf3sWVrwF_yxWdfhGXar9lW6ZPj7SMybS2BE2Qltp8hExEamHfSVggFiKuravuStfIauNE/pub?output=csv';
-// Use File → Share → Publish to web → CSV  (NOT the /export?format=csv URL)
-// ============================================================
-
-  
 // ─── State ───────────────────────────────────────────────────
-let guestList    = [];   // loaded from Google Sheet
-let matchedGuest = null; // currently selected guest
-const LOCAL_KEY  = 'lahi_checkin_log'; // localStorage key
+let guestList    = [];
+let matchedGuest = null;
+const LOCAL_KEY  = 'lahi_checkin_log';
 
-// ─── Today's date string for "already checked in" detection ──
+// Sync timer state
+let syncTimer       = null;
+let countdownTimer  = null;
+let secondsUntilSync = SYNC_INTERVAL_SEC;
+let isFirstLoad     = true;
+
+// ─── Date / time helpers ─────────────────────────────────────
 function todayStr() {
   return new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
 }
-
-function isCheckedInToday(g) {
-  const at = (g.ArrivalTime || g['Arrival Time'] || g.arrivalTime || '').trim();
-  if (!at) return false;
-  // arrival string contains today's date portion e.g. "25 May 2026"
-  return at.includes(todayStr());
-}
-
-function isGiftApplicable(g) {
-  const v = (g.gift_applicable || g.Gift_Applicable || g.GiftApplicable || '').trim().toLowerCase();
-  return v === 'yes';
-}
-
-// ─── Local Storage Log ────────────────────────────────────────
-function getLocalLog() {
-  try { return JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]'); }
-  catch { return []; }
-}
-
-function saveToLocalLog(entry) {
-  const log = getLocalLog();
-  // overwrite if same name+date exists
-  const todayD = todayStr();
-  const idx = log.findIndex(e => e.Name && e.Name.toLowerCase() === (entry.Name||'').toLowerCase() && (e.ArrivalTime||'').includes(todayD));
-  if (idx >= 0) log[idx] = entry; else log.push(entry);
-  try { localStorage.setItem(LOCAL_KEY, JSON.stringify(log)); } catch(e) { console.warn('localStorage full?', e); }
-}
-
-function getLocalLogToday() {
-  const todayD = todayStr();
-  return getLocalLog().filter(e => (e.ArrivalTime||'').includes(todayD));
-}
-
-// ─── CSV Export ───────────────────────────────────────────────
-function openExportModal() {
-  const log = getLocalLogToday();
-  const all = getLocalLog();
-  document.getElementById('exportInfo').innerHTML =
-    `Local backup contains <span class="export-stat">${all.length}</span> total entries, ` +
-    `<span class="export-stat">${log.length}</span> checked in <strong>today</strong>.<br><br>` +
-    `The downloaded CSV will include <strong>all entries</strong> from this device's local backup (today + previous sessions). ` +
-    `This is your offline safety net in case Google Sheets is unavailable.`;
-  document.getElementById('exportModal').classList.add('active');
-}
-
-function doExportCsv() {
-  const log = getLocalLog();
-  if (!log.length) { alert('No local check-in data found yet.'); return; }
-  const headers = ['Name','Organisation','Designation','Email','Mobile','Remark','ArrivalTime','gift_applicable','Source'];
-  const rows = log.map(e => headers.map(h => '"' + (String(e[h]||'')).replace(/"/g,'""') + '"').join(','));
-  const csv = [headers.join(','), ...rows].join('\r\n');
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href = url;
-  a.download = `lahi_checkin_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
-  dismissModal('exportModal');
-}
-
-// ─── Helpers ─────────────────────────────────────────────────
 function formatTime(d) {
   return (d||new Date()).toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12: true });
 }
-
-function escHtml(s) {
-  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function isCheckedInToday(g) {
+  const at = (g.ArrivalTime || g['Arrival Time'] || g.arrivalTime || '').trim();
+  return at ? at.includes(todayStr()) : false;
+}
+function isGiftApplicable(g) {
+  return (g.gift_applicable || g.Gift_Applicable || g.GiftApplicable || '').trim().toLowerCase() === 'yes';
 }
 
-function highlightMatch(text, query) {
-  if (!query) return escHtml(text);
-  const re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
-  return escHtml(text).replace(re, '<mark>$1</mark>');
+// ─── Misc helpers ─────────────────────────────────────────────
+function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function highlightMatch(text, q) {
+  if (!q) return escHtml(text);
+  return escHtml(text).replace(new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<mark>$1</mark>');
 }
-
 function getGuestName(g) { return (g.Name || g.name || '').trim(); }
 function getGuestOrg(g)  { return (g.Organisation || g.organization || g.Organization || '').trim(); }
+function setField(id, v) { document.getElementById(id).value = v || ''; }
+
+// ─── Local backup ─────────────────────────────────────────────
+function getLocalLog() { try { return JSON.parse(localStorage.getItem(LOCAL_KEY)||'[]'); } catch { return []; } }
+function saveToLocalLog(entry) {
+  const log = getLocalLog();
+  const idx = log.findIndex(e => e.Name && e.Name.toLowerCase()===(entry.Name||'').toLowerCase() && (e.ArrivalTime||'').includes(todayStr()));
+  if (idx >= 0) log[idx] = entry; else log.push(entry);
+  try { localStorage.setItem(LOCAL_KEY, JSON.stringify(log)); } catch(e) { console.warn('localStorage error', e); }
+}
+function getLocalLogToday() { return getLocalLog().filter(e => (e.ArrivalTime||'').includes(todayStr())); }
+
+// ─── Export ───────────────────────────────────────────────────
+function openExportModal() {
+  const all = getLocalLog(), today = getLocalLogToday();
+  document.getElementById('exportInfo').innerHTML =
+    `Local backup: <span class="export-stat">${all.length}</span> total, <span class="export-stat">${today.length}</span> today.<br><br>` +
+    `Downloads all entries saved on <strong>this device</strong>. The Google Sheet is the master record across all tablets.`;
+  document.getElementById('exportModal').classList.add('active');
+}
+function doExportCsv() {
+  const log = getLocalLog();
+  if (!log.length) { alert('No local check-in data found yet.'); return; }
+  const h = ['Name','Organisation','Designation','Email','Mobile','Remark','ArrivalTime','gift_applicable','Source'];
+  const rows = log.map(e => h.map(k => '"'+(String(e[k]||'')).replace(/"/g,'""')+'"').join(','));
+  const blob = new Blob([[h.join(','), ...rows].join('\r\n')], { type:'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `lahi_checkin_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click(); URL.revokeObjectURL(a.href);
+  dismissModal('exportModal');
+}
 
 // ─── CSV Parser ───────────────────────────────────────────────
 function parseCsv(text) {
@@ -689,16 +599,14 @@ function parseCsv(text) {
     const cols = []; let cur = '', inQ = false;
     for (let i = 0; i < row.length; i++) {
       const ch = row[i];
-      if (ch === '"') { if (inQ && row[i+1]==='"') { cur+='"'; i++; } else inQ=!inQ; }
+      if (ch==='"') { if (inQ && row[i+1]==='"') { cur+='"'; i++; } else inQ=!inQ; }
       else if (ch===',' && !inQ) { cols.push(cur); cur=''; }
       else cur+=ch;
     }
-    cols.push(cur);
-    lines.push(cols);
+    cols.push(cur); lines.push(cols);
   }
   return lines;
 }
-
 function buildGuestList(rows) {
   if (rows.length < 2) return [];
   const headers = rows[0].map(h => h.trim());
@@ -711,275 +619,228 @@ function buildGuestList(rows) {
 
 // ─── Dashboard ────────────────────────────────────────────────
 function updateDashboard() {
-  const checkedIn  = guestList.filter(isCheckedInToday).length;
-  const localToday = getLocalLogToday().length;
-  const displayed  = Math.max(checkedIn, localToday);
-
-  const orgs = new Set(
-    guestList.filter(g => getGuestOrg(g))
-             .map(g => getGuestOrg(g).toLowerCase())
-  ).size;
-
-  const gifts = guestList.filter(g => isCheckedInToday(g) && isGiftApplicable(g)).length
-    || getLocalLogToday().filter(e => (e.gift_applicable||'').toLowerCase()==='yes').length;
-
-  animateNumber('statVisited', displayed);
-  animateNumber('statOrgs', orgs);
-  animateNumber('statGifts', gifts);
+  const checkedIn = guestList.filter(isCheckedInToday).length;
+  const orgs = new Set(guestList.filter(g=>getGuestOrg(g)).map(g=>getGuestOrg(g).toLowerCase())).size;
+  const gifts = guestList.filter(g=>isCheckedInToday(g)&&isGiftApplicable(g)).length;
+  animNum('statVisited', Math.max(checkedIn, getLocalLogToday().length));
+  animNum('statOrgs',    orgs);
+  animNum('statGifts',   gifts || guestList.filter(g=>isGiftApplicable(g)&&isCheckedInToday(g)).length);
 }
-
-function animateNumber(id, target) {
+function animNum(id, target) {
   const el = document.getElementById(id);
-  const start = parseInt(el.textContent) || 0;
-  if (start === target) { el.textContent = target; return; }
-  const dur = 400, t0 = performance.now();
+  const start = parseInt(el.textContent)||0;
+  if (start===target) { el.textContent=target; return; }
+  const dur=400, t0=performance.now();
   (function step(now) {
-    const p = Math.min((now-t0)/dur, 1);
-    el.textContent = Math.round(start + (target-start) * (1-Math.pow(1-p,3)));
-    if (p < 1) requestAnimationFrame(step); else el.textContent = target;
+    const p=Math.min((now-t0)/dur,1);
+    el.textContent=Math.round(start+(target-start)*(1-Math.pow(1-p,3)));
+    if(p<1) requestAnimationFrame(step); else el.textContent=target;
   })(performance.now());
 }
 
-// ─── Data Loading ─────────────────────────────────────────────
-const CORS_PROXIES = [
+// ─── Fetch with CORS proxy fallback ───────────────────────────
+const PROXIES = [
   u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
   u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
 ];
-
-async function fetchWithFallback(url) {
-  // Direct
+async function fetchCsv(url) {
+  // Try direct first
   try {
-    setSub('Connecting to Google Sheets…');
     const r = await fetch(url, { redirect:'follow' });
-    if (r.ok) {
-      const t = await r.text();
-      if (t.trim().startsWith('<!')) throw new Error('Got HTML – sheet not published as CSV');
-      console.log('[Kiosk] Direct fetch OK');
-      return t;
-    }
-    throw new Error('HTTP ' + r.status);
-  } catch(e) { console.warn('[Kiosk] Direct failed:', e.message); }
-  // Proxies
-  for (let i=0; i<CORS_PROXIES.length; i++) {
+    if (r.ok) { const t=await r.text(); if(!t.trim().startsWith('<!')) return t; }
+  } catch(e) {}
+  // Try proxies
+  for (const proxy of PROXIES) {
     try {
-      setSub(`Trying alternate connection (${i+1})…`);
-      const r = await fetch(CORS_PROXIES[i](url));
-      if (r.ok) {
-        const t = await r.text();
-        if (t.trim().startsWith('<!')) throw new Error('HTML response');
-        console.log('[Kiosk] Proxy', i+1, 'OK');
-        return t;
-      }
-      throw new Error('HTTP ' + r.status);
-    } catch(e) { console.warn('[Kiosk] Proxy', i+1, 'failed:', e.message); }
+      const r = await fetch(proxy(url));
+      if (r.ok) { const t=await r.text(); if(!t.trim().startsWith('<!')) return t; }
+    } catch(e) {}
   }
-  throw new Error('All methods failed. Publish your sheet as CSV via File → Share → Publish to web.');
+  throw new Error('Could not fetch CSV. Check sheet is published to web.');
 }
 
-function setSub(t) { const el=document.getElementById('loadingSubText'); if(el) el.textContent=t; }
+// ─── Sync status UI ───────────────────────────────────────────
+function setSyncStatus(state, msg) {
+  const bar   = document.getElementById('syncBar');
+  const pulse = document.getElementById('syncPulse');
+  const txt   = document.getElementById('syncText');
+  const btn   = document.getElementById('retryBtn');
+  bar.className   = 'sync-bar' + (state==='ok'?'':' '+(state==='warn'?'warn':'offline'));
+  pulse.className = 'sync-pulse' + (state==='ok'?'':' '+(state==='warn'?'warn':'offline'));
+  txt.textContent = msg;
+  btn.className   = 'sheet-retry-btn' + (state!=='ok'?' visible':'');
+}
+function startCountdown() {
+  secondsUntilSync = SYNC_INTERVAL_SEC;
+  clearInterval(countdownTimer);
+  countdownTimer = setInterval(() => {
+    secondsUntilSync--;
+    const el = document.getElementById('syncCountdown');
+    if (el) el.textContent = secondsUntilSync > 0 ? `Next sync in ${secondsUntilSync}s` : '';
+    if (secondsUntilSync <= 0) { clearInterval(countdownTimer); el.textContent=''; }
+  }, 1000);
+}
 
-async function loadGuestData() {
-  console.log('[Kiosk] Loading…', SHEET_CSV_URL);
-  document.getElementById('loadingOverlay').classList.add('active');
+// ─── Load / refresh guest data ────────────────────────────────
+async function loadGuestData(silent = false) {
+  if (!silent) {
+    document.getElementById('loadingOverlay').classList.add('active');
+    document.getElementById('loadingSubText').textContent = 'Connecting to Google Sheets…';
+  }
 
   if (SHEET_CSV_URL.includes('YOUR_SHEET_ID')) {
-    document.getElementById('loadingOverlay').classList.remove('active');
-    showSheetStatus('warn','⚠ Set your SHEET_CSV_URL in the script to load guest data.',true);
-    updateDashboard();
-    return;
+    if (!silent) document.getElementById('loadingOverlay').classList.remove('active');
+    setSyncStatus('warn', '⚠ Set SHEET_CSV_URL to enable cross-tablet sync');
+    updateDashboard(); return;
   }
 
   try {
-    const csvUrl = SHEET_CSV_URL + (SHEET_CSV_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
-    const text = await fetchWithFallback(csvUrl);
+    const url = SHEET_CSV_URL + (SHEET_CSV_URL.includes('?')? '&':'?') + 't=' + Date.now();
+    const text = await fetchCsv(url);
     const rows = parseCsv(text);
     guestList = buildGuestList(rows);
-    console.log('[Kiosk] Loaded', guestList.length, 'guests. Cols:', rows[0]);
+    console.log('[Kiosk] Synced', guestList.length, 'guests at', new Date().toLocaleTimeString());
     updateDashboard();
-    showSheetStatus('ok', `✓ ${guestList.length} guests loaded from Google Sheets`, false);
+    const now = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    setSyncStatus('ok', `✓ Live — ${guestList.length} guests · Last sync ${now}`);
+    startCountdown();
+    if (isFirstLoad) { isFirstLoad = false; document.getElementById('sheetErrorModal').classList.remove('active'); }
   } catch(err) {
-    console.error('[Kiosk] Load failed:', err.message);
-    showSheetStatus('warn','Could not load guest list — new registrations still work offline.',true);
-    showSheetErrorModal(err.message);
+    console.error('[Kiosk] Sync failed:', err.message);
+    setSyncStatus('warn', '⚠ Sync failed — data may be stale across tablets');
+    if (isFirstLoad) { isFirstLoad=false; showSheetErrorModal(err.message); }
     updateDashboard();
   } finally {
-    document.getElementById('loadingOverlay').classList.remove('active');
+    if (!silent) document.getElementById('loadingOverlay').classList.remove('active');
   }
-}
-
-function showSheetStatus(type, msg, showRetry) {
-  const bar  = document.getElementById('sheetStatusBar');
-  const icon = document.getElementById('sheetStatusIcon');
-  const txt  = document.getElementById('sheetStatusText');
-  const btn  = document.getElementById('sheetRetryBtn');
-  bar.className = 'sheet-status-bar ' + type;
-  icon.className = type==='ok' ? 'fa-solid fa-circle-check' : 'fa-solid fa-triangle-exclamation';
-  txt.textContent = msg;
-  btn.style.display = showRetry ? 'flex' : 'none';
 }
 
 function showSheetErrorModal(errMsg) {
   const d = document.getElementById('modalErrorDetail');
-  if (errMsg) { d.textContent = '⚠ ' + errMsg; d.classList.add('visible'); }
+  if (errMsg) { d.textContent='⚠ '+errMsg; d.classList.add('visible'); }
   document.getElementById('sheetErrorModal').classList.add('active');
 }
-
-function retryLoad() { dismissModal('sheetErrorModal'); loadGuestData(); }
+function retryLoad() { dismissModal('sheetErrorModal'); loadGuestData(false); }
+function manualRefresh() { clearTimeout(syncTimer); loadGuestData(true).then(scheduleSyncLoop); }
 function dismissModal(id) { document.getElementById(id).classList.remove('active'); }
+
+// ─── Silent auto-sync loop ────────────────────────────────────
+function scheduleSyncLoop() {
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(async () => {
+    await loadGuestData(true);
+    scheduleSyncLoop(); // reschedule after each sync
+  }, SYNC_INTERVAL_SEC * 1000);
+}
 
 // ─── Tab switching ────────────────────────────────────────────
 function switchTab(tab) {
-  document.getElementById('tabName').classList.toggle('active', tab==='name');
-  document.getElementById('tabOrg').classList.toggle('active', tab==='org');
-  document.getElementById('panelName').classList.toggle('active', tab==='name');
-  document.getElementById('panelOrg').classList.toggle('active', tab==='org');
+  ['tabName','tabOrg'].forEach(id => document.getElementById(id).classList.toggle('active', id==='tab'+tab.charAt(0).toUpperCase()+tab.slice(1)));
+  ['panelName','panelOrg'].forEach(id => document.getElementById(id).classList.toggle('active', id==='panel'+tab.charAt(0).toUpperCase()+tab.slice(1)));
   closeAllDropdowns();
 }
 
-// ─── Dropdown helpers ─────────────────────────────────────────
+// ─── Dropdowns ────────────────────────────────────────────────
 function closeAllDropdowns() {
   document.getElementById('nameDropdown').classList.remove('open');
   document.getElementById('orgDropdown').classList.remove('open');
 }
+function checkedBadge(g) { return isCheckedInToday(g)?`<span class="dd-checked-badge"><i class="fa-solid fa-circle-check"></i> Checked In</span>`:''; }
+function giftBadge(g)    { return isGiftApplicable(g)?`<span class="dd-gift-badge"><i class="fa-solid fa-gift"></i> Gift</span>`:''; }
 
-function checkedBadge(g) {
-  return isCheckedInToday(g)
-    ? `<span class="dd-checked-badge"><i class="fa-solid fa-circle-check"></i> Checked In</span>`
-    : '';
-}
-function giftBadge(g) {
-  return isGiftApplicable(g)
-    ? `<span class="dd-gift-badge"><i class="fa-solid fa-gift"></i> Gift</span>`
-    : '';
-}
-
-// ─── Name autocomplete ────────────────────────────────────────
+// Name autocomplete
 document.getElementById('searchInput').addEventListener('input', function() {
   const q = this.value.trim().toLowerCase();
   const dd = document.getElementById('nameDropdown');
   if (!q) { dd.classList.remove('open'); return; }
 
-  // Filter out guests already checked in today — they don't appear in dropdown
   const matches = guestList.filter(g => {
-    if (isCheckedInToday(g)) return false;  // ← KEY: hide already checked-in guests
+    if (isCheckedInToday(g)) return false;
     const name = getGuestName(g).toLowerCase();
-    return name.split(/\s+/).some(w => w.startsWith(q)) || name.includes(q);
-  }).slice(0, 12);
+    return name.split(/\s+/).some(w=>w.startsWith(q)) || name.includes(q);
+  }).slice(0, 15);
 
   if (!matches.length) {
-    // Check if they're hidden because already checked in
-    const hiddenDueToCheckin = guestList.filter(g => {
+    const alreadyIn = guestList.find(g => {
       if (!isCheckedInToday(g)) return false;
       const name = getGuestName(g).toLowerCase();
-      return name.split(/\s+/).some(w => w.startsWith(q)) || name.includes(q);
+      return name.split(/\s+/).some(w=>w.startsWith(q)) || name.includes(q);
     });
-    if (hiddenDueToCheckin.length) {
-      dd.innerHTML = `<div class="dropdown-empty"><i class="fa-solid fa-circle-check" style="color:var(--success);margin-right:6px"></i>${escHtml(getGuestName(hiddenDueToCheckin[0]))} is already checked in today</div>`;
-    } else {
-      dd.innerHTML = '<div class="dropdown-empty"><i class="fa-solid fa-user-slash" style="margin-right:6px"></i>No guests found — will register as new</div>';
-    }
+    dd.innerHTML = alreadyIn
+      ? `<div class="dropdown-empty" style="color:var(--success)"><i class="fa-solid fa-circle-check" style="margin-right:6px"></i>${escHtml(getGuestName(alreadyIn))} is already checked in today</div>`
+      : `<div class="dropdown-empty"><i class="fa-solid fa-user-slash" style="margin-right:6px"></i>No guests found — will register as new</div>`;
   } else {
     const qRaw = this.value.trim();
     dd.innerHTML = matches.map(g => {
-      const name = getGuestName(g);
-      const org  = getGuestOrg(g);
-      const idx  = guestList.indexOf(g);
+      const idx = guestList.indexOf(g);
       return `<div class="dropdown-item" onmousedown="selectNameGuest(${idx})">
         <div class="dropdown-item-row">
-          <span class="dropdown-item-name-text">${highlightMatch(name, qRaw)}</span>
+          <span class="dropdown-item-name-text">${highlightMatch(getGuestName(g), qRaw)}</span>
           <span class="dropdown-item-badges">${giftBadge(g)}${checkedBadge(g)}</span>
         </div>
-        ${org ? `<div class="dropdown-item-meta"><i class="fa-solid fa-building" style="margin-right:4px;font-size:10px"></i>${escHtml(org)}</div>` : ''}
+        ${getGuestOrg(g)?`<div class="dropdown-item-meta"><i class="fa-solid fa-building" style="margin-right:4px;font-size:10px"></i>${escHtml(getGuestOrg(g))}</div>`:''}
       </div>`;
     }).join('');
   }
   dd.classList.add('open');
 });
-
 document.getElementById('searchInput').addEventListener('keydown', function(e) {
   if (e.key==='Enter') { searchGuest(); closeAllDropdowns(); }
   if (e.key==='Escape') closeAllDropdowns();
 });
-document.getElementById('searchInput').addEventListener('blur', () => setTimeout(closeAllDropdowns,150));
+document.getElementById('searchInput').addEventListener('blur', () => setTimeout(closeAllDropdowns, 150));
 
 function selectNameGuest(idx) {
-  const g = guestList[idx];
-  if (!g) return;
+  const g = guestList[idx]; if (!g) return;
   document.getElementById('searchInput').value = getGuestName(g);
-  closeAllDropdowns();
-  populateFormFromGuest(g);
+  closeAllDropdowns(); populateFormFromGuest(g);
 }
 
-// ─── Org autocomplete ─────────────────────────────────────────
+// Org autocomplete
 document.getElementById('orgSearchInput').addEventListener('input', function() {
   const q = this.value.trim().toLowerCase();
   const dd = document.getElementById('orgDropdown');
   if (!q) { dd.classList.remove('open'); return; }
-
-  // Hide already-checked-in guests from org dropdown too
-  const matches = guestList.filter(g => {
-    if (isCheckedInToday(g)) return false;
-    return getGuestOrg(g).toLowerCase().includes(q);
-  }).slice(0, 12);
-
+  const matches = guestList.filter(g => !isCheckedInToday(g) && getGuestOrg(g).toLowerCase().includes(q)).slice(0, 15);
   if (!matches.length) {
-    dd.innerHTML = '<div class="dropdown-empty"><i class="fa-solid fa-building-circle-xmark" style="margin-right:6px"></i>No organisations found</div>';
+    dd.innerHTML = `<div class="dropdown-empty"><i class="fa-solid fa-building-circle-xmark" style="margin-right:6px"></i>No organisations found</div>`;
   } else {
     const qRaw = this.value.trim();
     dd.innerHTML = matches.map(g => {
-      const name = getGuestName(g);
-      const org  = getGuestOrg(g);
-      const idx  = guestList.indexOf(g);
+      const idx = guestList.indexOf(g);
       return `<div class="dropdown-item" onmousedown="selectOrgGuest(${idx})">
         <div class="dropdown-item-row">
-          <span class="dropdown-item-name-text">${highlightMatch(org, qRaw)}</span>
+          <span class="dropdown-item-name-text">${highlightMatch(getGuestOrg(g), qRaw)}</span>
           <span class="dropdown-item-badges">${giftBadge(g)}</span>
         </div>
-        <div class="dropdown-item-meta"><i class="fa-solid fa-user" style="margin-right:4px;font-size:10px"></i>${escHtml(name)}</div>
+        <div class="dropdown-item-meta"><i class="fa-solid fa-user" style="margin-right:4px;font-size:10px"></i>${escHtml(getGuestName(g))}</div>
       </div>`;
     }).join('');
   }
   dd.classList.add('open');
 });
-
 document.getElementById('orgSearchInput').addEventListener('keydown', function(e) {
   if (e.key==='Enter') { searchByOrg(); closeAllDropdowns(); }
   if (e.key==='Escape') closeAllDropdowns();
 });
-document.getElementById('orgSearchInput').addEventListener('blur', () => setTimeout(closeAllDropdowns,150));
+document.getElementById('orgSearchInput').addEventListener('blur', () => setTimeout(closeAllDropdowns, 150));
 document.addEventListener('click', e => { if (!e.target.closest('.search-input-wrap')) closeAllDropdowns(); });
 
 function selectOrgGuest(idx) {
-  const g = guestList[idx];
-  if (!g) return;
+  const g = guestList[idx]; if (!g) return;
   document.getElementById('orgSearchInput').value = getGuestOrg(g);
-  closeAllDropdowns();
-  populateFormFromGuest(g);
+  closeAllDropdowns(); populateFormFromGuest(g);
 }
 
-function clearForm() {
-  ['fieldName','fieldOrg','fieldDesig','fieldEmail','fieldMobile','fieldRemark','fieldArrival'].forEach(id => setField(id,''));
-  matchedGuest = null;
-  document.getElementById('guestBanner').className = 'guest-banner';
-  document.getElementById('submitBtnText').textContent = 'Complete Check-In';
-  document.getElementById('searchInput').value = '';
-  document.getElementById('orgSearchInput').value = '';
-}
+// ─── Search ───────────────────────────────────────────────────
 function searchGuest() {
   const query = document.getElementById('searchInput').value.trim().toLowerCase();
   if (!query) { showStatus('Please enter a name to search.', 'error'); return; }
-
-  const found = guestList.find(g => {
-    const name = getGuestName(g).toLowerCase();
-    return name.split(/\s+/).some(w => w.startsWith(query)) || name.includes(query);
-  });
-
+  const found = guestList.find(g => { const n=getGuestName(g).toLowerCase(); return n.split(/\s+/).some(w=>w.startsWith(query))||n.includes(query); });
   clearForm(); hideStatus(); closeAllDropdowns();
-
   if (found) {
     if (isCheckedInToday(found)) {
-      setBanner('warn', 'fa-circle-exclamation',
-        `<strong>${escHtml(getGuestName(found))}</strong> is already checked in today (${found.ArrivalTime||found['Arrival Time']||''}).`);
+      setBanner('conflict','fa-circle-exclamation',`<strong>${escHtml(getGuestName(found))}</strong> is already checked in today at <strong>${found.ArrivalTime||found['Arrival Time']||''}</strong> — registered from another desk.`);
       return;
     }
     populateFormFromGuest(found);
@@ -993,14 +854,11 @@ function searchGuest() {
 
 function searchByOrg() {
   const query = document.getElementById('orgSearchInput').value.trim().toLowerCase();
-  if (!query) { showStatus('Please enter an organisation name to search.', 'error'); return; }
-
+  if (!query) { showStatus('Please enter an organisation name.', 'error'); return; }
   const found = guestList.find(g => !isCheckedInToday(g) && getGuestOrg(g).toLowerCase().includes(query));
   clearForm(); hideStatus(); closeAllDropdowns();
-
-  if (found) {
-    populateFormFromGuest(found);
-  } else {
+  if (found) { populateFormFromGuest(found); }
+  else {
     matchedGuest = null;
     setBanner('new','fa-user-plus','No pending guest found for that organisation. Register as new below.');
     document.getElementById('submitBtnText').textContent = 'Register & Check-In';
@@ -1009,8 +867,6 @@ function searchByOrg() {
 
 function populateFormFromGuest(g) {
   matchedGuest = g;
-  console.log('[Kiosk] Selected:', getGuestName(g), '| Row:', g._rowIndex, '| Gift:', isGiftApplicable(g));
-
   setField('fieldName',   getGuestName(g));
   setField('fieldOrg',    getGuestOrg(g));
   setField('fieldDesig',  g.Designation || g.designation || '');
@@ -1018,11 +874,7 @@ function populateFormFromGuest(g) {
   setField('fieldMobile', g.Mobile || g.mobile || g.Phone || '');
   setField('fieldRemark', g.Remark || g.remark || '');
   setField('fieldArrival', g.ArrivalTime || g['Arrival Time'] || g.arrivalTime || '');
-
-  // Build banner text — embed a small gift pill inline if applicable (staff-facing, subtle)
-  const giftPill = isGiftApplicable(g)
-    ? `<span class="gift-indicator"><i class="fa-solid fa-gift"></i> Gift Eligible</span>`
-    : '';
+  const giftPill = isGiftApplicable(g) ? `<span class="gift-indicator"><i class="fa-solid fa-gift"></i> Gift Eligible</span>` : '';
   setBanner('found','fa-circle-check',`<strong>${escHtml(getGuestName(g))}</strong> found. Review details and click Check-In.${giftPill}`);
   document.getElementById('submitBtnText').textContent = 'Complete Check-In';
 }
@@ -1034,30 +886,53 @@ function setBanner(type, icon, html) {
   document.getElementById('guestBannerText').innerHTML = html;
 }
 
-function setField(id, val) { document.getElementById(id).value = val || ''; }
-
 function clearForm() {
-  ['fieldName','fieldOrg','fieldDesig','fieldEmail','fieldMobile','fieldRemark','fieldArrival'].forEach(id => setField(id,''));
+  ['fieldName','fieldOrg','fieldDesig','fieldEmail','fieldMobile','fieldRemark','fieldArrival'].forEach(id=>setField(id,''));
   matchedGuest = null;
   document.getElementById('guestBanner').className = 'guest-banner';
   document.getElementById('submitBtnText').textContent = 'Complete Check-In';
   document.getElementById('searchInput').value = '';
   document.getElementById('orgSearchInput').value = '';
-  showGiftBanner(false);
 }
 
-// ─── Submit ───────────────────────────────────────────────────
+// ─── Submit (with live pre-check for cross-tablet conflicts) ──
 async function submitCheckIn() {
   const name = document.getElementById('fieldName').value.trim();
   if (!name) { showStatus('Name is required.', 'error'); return; }
 
-  const arrivalTime = formatTime(new Date());
-  setField('fieldArrival', arrivalTime);
-
   const btn = document.getElementById('submitBtn');
   btn.disabled = true; btn.classList.add('loading'); hideStatus();
+  document.getElementById('submitBtnText').textContent = 'Verifying…';
 
-  const giftApplicable = matchedGuest ? (isGiftApplicable(matchedGuest) ? 'Yes' : 'No') : 'No';
+  // ── STEP 1: Re-fetch the sheet right now to catch same-second duplicate from another tablet
+  try {
+    const url = SHEET_CSV_URL + (SHEET_CSV_URL.includes('?')? '&':'?') + 't=' + Date.now();
+    const text = await fetchCsv(url);
+    guestList = buildGuestList(parseCsv(text));
+  } catch(e) { console.warn('[Kiosk] Pre-check fetch failed, proceeding with cached data'); }
+
+  // ── STEP 2: Conflict check — is this guest already in the sheet with an ArrivalTime today?
+  const existingGuest = guestList.find(g => {
+    const gn = getGuestName(g).toLowerCase();
+    return gn === name.toLowerCase() || (matchedGuest && g._rowIndex === matchedGuest._rowIndex);
+  });
+
+  if (existingGuest && isCheckedInToday(existingGuest)) {
+    // Another tablet already checked this person in while we were filling the form
+    btn.disabled = false; btn.classList.remove('loading');
+    document.getElementById('submitBtnText').textContent = 'Complete Check-In';
+    setBanner('conflict','fa-circle-exclamation',
+      `<strong>${escHtml(getGuestName(existingGuest))}</strong> was just checked in at <strong>${existingGuest.ArrivalTime||existingGuest['Arrival Time']}</strong> from another desk. No duplicate created.`);
+    updateDashboard();
+    return;
+  }
+
+  // ── STEP 3: All clear — proceed with check-in
+  const arrivalTime = formatTime(new Date());
+  setField('fieldArrival', arrivalTime);
+  document.getElementById('submitBtnText').textContent = 'Saving…';
+
+  const giftApplicable = matchedGuest ? (isGiftApplicable(matchedGuest)?'Yes':'No') : (existingGuest?isGiftApplicable(existingGuest)?'Yes':'No':'No');
   const entryData = {
     Name:            name,
     Organisation:    document.getElementById('fieldOrg').value.trim(),
@@ -1070,70 +945,57 @@ async function submitCheckIn() {
     Source:          'kiosk',
   };
 
-  // Always save locally first (offline backup)
+  // Save locally first
   saveToLocalLog(entryData);
-  console.log('[Kiosk] Saved to local storage:', entryData);
 
+  // Build form data
   const fd = new FormData();
   Object.entries(entryData).forEach(([k,v]) => fd.append(k,v));
-
-  if (matchedGuest) {
+  const target = matchedGuest || existingGuest;
+  if (target && target._rowIndex) {
     fd.append('action',   'updateArrival');
-    fd.append('rowIndex', matchedGuest._rowIndex);
-    console.log('[Kiosk] Updating row', matchedGuest._rowIndex);
-    // Update in-memory
-    const key = Object.keys(matchedGuest).find(k=>/arrivaltime|arrival time/i.test(k)) || 'ArrivalTime';
-    matchedGuest[key] = arrivalTime;
+    fd.append('rowIndex', target._rowIndex);
+    const key = Object.keys(target).find(k=>/arrivaltime|arrival time/i.test(k)) || 'ArrivalTime';
+    target[key] = arrivalTime;
   } else {
     fd.append('action', 'addNewGuest');
-    console.log('[Kiosk] Adding new guest:', name);
-    guestList.push({ _rowIndex: guestList.length + 2, ...entryData });
+    guestList.push({ _rowIndex: guestList.length+2, ...entryData });
   }
 
-  // Try to sync to Google Sheets
+  // Sync to Apps Script
   let synced = false;
   if (!APPS_SCRIPT_URL.includes('YOUR_DEPLOYMENT_ID')) {
     try {
-      const res = await fetch(APPS_SCRIPT_URL, { method:'POST', body: fd });
-      const txt = await res.text();
-      console.log('[Kiosk] Apps Script response:', txt);
+      await fetch(APPS_SCRIPT_URL, { method:'POST', body:fd });
       synced = true;
-    } catch(err) {
-      console.warn('[Kiosk] Sheet sync failed (saved locally):', err.message);
-    }
+    } catch(e) { console.warn('[Kiosk] Sync failed, saved locally'); }
   }
 
   updateDashboard();
-
-  const giftNote = giftApplicable === 'Yes'
-    ? ' <span style="color:var(--gold);font-weight:700">🎁 Gift bag at exit</span>'
-    : '';
-  const syncNote = synced ? '' : ' <em style="opacity:0.75">(Saved locally)</em>';
+  const giftNote = giftApplicable==='Yes' ? ' <span style="color:var(--gold);font-weight:700">🎁 Gift bag at exit gate</span>' : '';
+  const syncNote = synced ? '' : ' <em style="opacity:0.75">(Saved locally — will sync)</em>';
   showStatus(`✓ Check-in successful for <strong>${escHtml(name)}</strong> at ${arrivalTime}.${giftNote}${syncNote}`, 'success', 7000);
 
-  setTimeout(() => {
-    clearForm();
-    document.getElementById('guestBanner').className = 'guest-banner';
-  }, 3000);
-
+  setTimeout(() => { clearForm(); document.getElementById('guestBanner').className='guest-banner'; }, 3000);
   btn.disabled = false; btn.classList.remove('loading');
+  document.getElementById('submitBtnText').textContent = 'Complete Check-In';
+
+  // Immediately re-sync all tablets by refreshing our own data
+  setTimeout(() => loadGuestData(true), 1500);
 }
 
-// ─── Status ───────────────────────────────────────────────────
+// ─── Status messages ──────────────────────────────────────────
 function showStatus(msg, type, duration) {
   const el = document.getElementById('statusMsg');
-  el.className = 'status-message ' + type;
+  el.className = 'status-message '+type;
   document.getElementById('statusText').innerHTML = msg;
   el.style.display = 'flex';
   if (duration) setTimeout(hideStatus, duration);
 }
-function hideStatus() {
-  const el = document.getElementById('statusMsg');
-  el.style.display = 'none'; el.className = 'status-message';
-}
+function hideStatus() { const el=document.getElementById('statusMsg'); el.style.display='none'; el.className='status-message'; }
 
 // ─── Init ────────────────────────────────────────────────────
-loadGuestData();
+loadGuestData(false).then(() => scheduleSyncLoop());
 </script>
 </body>
 </html>
