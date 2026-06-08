@@ -586,20 +586,25 @@ async function markGiftGiven() {
     giftGivenAt:  giftTime,
   };
 
-  // Save locally first
+  // Save locally first (backup)
   const giftLog = getGiftLog(); giftLog.push(entry); saveGiftLog(giftLog);
   console.log('[Gift] Marked:', entry);
 
-  // Sync to Apps Script (which writes GiftGivenAt to the sheet row)
+  // Sync to Apps Script via GET with URL params (same pattern as check-in)
+  let synced = false;
   if (!APPS_SCRIPT_URL.includes('YOUR_DEPLOYMENT_ID')) {
     try {
-      const fd = new FormData();
-      fd.append('action',      'markGiftGiven');
-      fd.append('name',        entry.Name);
-      fd.append('giftGivenAt', giftTime);
-      fd.append('rowIndex',    selectedGuest._rowIndex || '');
-      await fetch(APPS_SCRIPT_URL, { method:'POST', body:fd });
-      console.log('[Gift] Synced to sheet');
+      const params = new URLSearchParams({
+        action:      'markGiftGiven',
+        name:        entry.Name,
+        giftGivenAt: giftTime,
+        rowIndex:    String(selectedGuest._rowIndex != null ? selectedGuest._rowIndex : ''),
+      });
+      const res  = await fetch(APPS_SCRIPT_URL + '?' + params.toString(), { redirect:'follow' });
+      const json = await res.json().catch(() => ({}));
+      synced = json.status === 'success';
+      if (!synced) console.warn('[Gift] Apps Script returned:', json);
+      else console.log('[Gift] Synced to sheet');
     } catch(e) { console.warn('[Gift] Sync failed (saved locally):', e.message); }
   }
 
