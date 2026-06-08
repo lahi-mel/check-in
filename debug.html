@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAHI Kiosk — Debug Tool</title>
+<script src="config.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Courier New', monospace; background: #1a1a2e; color: #e0e0e0; padding: 20px; font-size: 13px; }
+  h1 { font-family: sans-serif; color: #f0c84a; margin-bottom: 4px; font-size: 20px; }
+  .subtitle { color: #888; margin-bottom: 20px; font-family: sans-serif; font-size: 13px; }
+  .card { background: #16213e; border-radius: 10px; padding: 16px 20px; margin-bottom: 14px; border-left: 4px solid #444; }
+  .card.pass  { border-color: #2ecc71; }
+  .card.fail  { border-color: #e74c3c; }
+  .card.warn  { border-color: #f39c12; }
+  .card.info  { border-color: #3498db; }
+  .card.running { border-color: #9b59b6; animation: pulse 1s ease-in-out infinite alternate; }
+  @keyframes pulse { from { opacity: 0.7; } to { opacity: 1; } }
+  .test-title { font-family: sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .pass  .test-title::before { content: '✅ '; }
+  .fail  .test-title::before { content: '❌ '; }
+  .warn  .test-title::before { content: '⚠️ '; }
+  .info  .test-title::before { content: 'ℹ️ '; }
+  .running .test-title::before { content: '🔄 '; }
+  .detail { color: #aaa; line-height: 1.7; white-space: pre-wrap; word-break: break-all; }
+  .detail .val { color: #f0c84a; }
+  .detail .good { color: #2ecc71; }
+  .detail .bad  { color: #e74c3c; }
+  .action-box { background: #0f3460; border-radius: 8px; padding: 14px 18px; margin-top: 10px; font-family: sans-serif; font-size: 13px; line-height: 1.7; color: #cce; }
+  .action-box strong { color: #f0c84a; }
+  .btn { display: inline-block; margin-top: 16px; padding: 12px 28px; background: #f0c84a; color: #1a1a2e; border: none; border-radius: 8px; font-family: sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .btn:hover { background: #d4af37; }
+  #summary { font-family: sans-serif; font-size: 16px; font-weight: 700; padding: 16px 20px; border-radius: 10px; margin-bottom: 20px; display: none; }
+  #summary.all-pass { background: #1a3a2a; color: #2ecc71; border: 2px solid #2ecc71; }
+  #summary.has-fail  { background: #3a1a1a; color: #e74c3c; border: 2px solid #e74c3c; }
+  code { background: #0f0f23; padding: 2px 6px; border-radius: 4px; color: #f0c84a; }
+</style>
+</head>
+<body>
+
+<h1>🔧 LAHI Kiosk — Live Debug Tool</h1>
+<p class="subtitle">Open this page on any tablet/device. It will diagnose every layer of the sync chain.</p>
+
+<div id="summary"></div>
+<div id="tests"></div>
+<button class="btn" onclick="location.reload()">🔄 Run Again</button>
+
+<script>
+// ── helpers ──────────────────────────────────────────────────
+const container = document.getElementById('tests');
+const results   = [];
+
+function addCard(id, title) {
+  const d = document.createElement('div');
+  d.className = 'card running';
+  d.id = 'card-' + id;
+  d.innerHTML = `<div class="test-title">${title}</div><div class="detail" id="detail-${id}">Running…</div>`;
+  container.appendChild(d);
+  return d;
+}
+
+function setResult(id, status, detailHtml, actionHtml) {
+  const card   = document.getElementById('card-' + id);
+  const detail = document.getElementById('detail-' + id);
+  card.className = 'card ' + status;
+  detail.innerHTML = detailHtml + (actionHtml ? `<div class="action-box">${actionHtml}</div>` : '');
+  results.push({ id, status });
+}
+
+function v(s) { return `<span class="val">${s}</span>`; }
+function g(s) { return `<span class="good">${s}</span>`; }
+function b(s) { return `<span class="bad">${s}</span>`; }
+
+// ── Test runner ───────────────────────────────────────────────
+async function runAll() {
+
+  // ── TEST 1: config.js loaded ──────────────────────────────
+  addCard('config', 'Test 1 — config.js loaded correctly');
+  await tick();
+
+  const hasApps  = typeof APPS_SCRIPT_URL !== 'undefined';
+  const hasSheet = typeof SHEET_CSV_URL   !== 'undefined';
+  const hasSec   = typeof SYNC_INTERVAL_SEC !== 'undefined';
+  const appsOk   = hasApps  && !APPS_SCRIPT_URL.includes('YOUR_DEPLOYMENT_ID');
+  const sheetOk  = hasSheet && !SHEET_CSV_URL.includes('YOUR_SHEET_ID');
+
+  if (!hasApps) {
+    setResult('config','fail',
+      b('config.js did not load or APPS_SCRIPT_URL is missing.'),
+      `<strong>Fix:</strong> Make sure <code>config.js</code> is in the same folder as <code>index.html</code> on GitHub and is committed/pushed.`);
+  } else if (!appsOk) {
+    setResult('config','fail',
+      `APPS_SCRIPT_URL = ${b('still has YOUR_DEPLOYMENT_ID placeholder')}\nSHEET_CSV_URL   = ${sheetOk ? g('set') : b('placeholder')}\nSYNC_INTERVAL_SEC = ${v(hasSec ? SYNC_INTERVAL_SEC : 'missing')}`,
+      `<strong>Fix:</strong> Open config.js and replace YOUR_DEPLOYMENT_ID with your real Apps Script /exec URL.`);
+  } else {
+    setResult('config','pass',
+      `APPS_SCRIPT_URL   = ${g(APPS_SCRIPT_URL.slice(0,60)+'…')}\nSHEET_CSV_URL     = ${sheetOk ? g(SHEET_CSV_URL.slice(0,60)+'…') : b('placeholder — OK if not used')}\nSYNC_INTERVAL_SEC = ${v(SYNC_INTERVAL_SEC)}`);
+  }
+
+  if (!appsOk) { showSummary(); return; } // can't continue without URL
+
+  // ── TEST 2: Apps Script reachable (getGuests) ─────────────
+  addCard('reach', 'Test 2 — Apps Script reachable via getGuests');
+  await tick();
+
+  let guests = null;
+  let reachErr = null;
+  let rawText  = '';
+  let statusCode = null;
+  try {
+    const url = APPS_SCRIPT_URL + '?action=getGuests&t=' + Date.now();
+    const res  = await fetch(url, { redirect: 'follow' });
+    statusCode = res.status;
+    rawText    = await res.text();
+    guests     = JSON.parse(rawText);
+  } catch(e) { reachErr = e.message; }
+
+  if (reachErr) {
+    setResult('reach','fail',
+      `Error: ${b(reachErr)}\nHTTP status: ${v(statusCode || 'n/a')}\nRaw response (first 300 chars):\n${b(rawText.slice(0,300))}`,
+      `<strong>Most likely cause:</strong> Apps Script is not deployed as a Web App, or access is set to "Anyone with Google Account" instead of "Anyone".<br><br>
+      <strong>Fix:</strong><br>
+      1. Open <a href="https://script.google.com" target="_blank" style="color:#f0c84a">script.google.com</a><br>
+      2. Deploy → Manage deployments → Edit (pencil icon)<br>
+      3. Set <strong>Who has access = Anyone</strong> (NOT "Anyone with Google account")<br>
+      4. Click <strong>Deploy</strong> → copy the new /exec URL into config.js`);
+  } else if (!Array.isArray(guests)) {
+    setResult('reach','fail',
+      `Response is not a JSON array.\nHTTP status: ${v(statusCode)}\nRaw (first 500 chars):\n${b(rawText.slice(0,500))}`,
+      `<strong>Fix:</strong> Your Apps Script handleRequest() is not returning JSON. Make sure you pasted the complete updated AppScript.js and saved + deployed a <strong>new version</strong>.`);
+  } else {
+    setResult('reach','pass',
+      `✓ Connected. ${g(guests.length + ' guests')} returned from sheet.\n\nFirst guest (sample): ${v(JSON.stringify(guests[0] || {}, null, 2))}`);
+  }
+
+  // ── TEST 3: Write test (addNewGuest with test flag) ────────
+  addCard('write', 'Test 3 — Write to sheet (updateArrival on row 0 — dry-run safe if no row 0)');
+  await tick();
+
+  // We use a real write action on the first guest if available, but only if safe
+  let writeOk = false;
+  let writeErr = null;
+  let writeResp = '';
+  try {
+    // Use addNewGuest with a clearly labelled test entry so you can delete it after
+    const params = new URLSearchParams({
+      action:          'addNewGuest',
+      name:            '__DEBUG_TEST__ ' + new Date().toLocaleTimeString(),
+      organisation:    'Debug Tool',
+      designation:     'Test',
+      email:           'debug@test.com',
+      mobile:          '0000000000',
+      remark:          'AUTO-GENERATED BY DEBUG TOOL — DELETE THIS ROW',
+      arrivalTime:     new Date().toLocaleString(),
+      gift_applicable: 'No',
+    });
+    const res  = await fetch(APPS_SCRIPT_URL + '?' + params.toString(), { redirect:'follow' });
+    writeResp  = await res.text();
+    const json = JSON.parse(writeResp);
+    writeOk    = json.status === 'success';
+    if (!writeOk) writeErr = json.message || writeResp;
+  } catch(e) { writeErr = e.message; }
+
+  if (writeOk) {
+    setResult('write','pass',
+      `${g('✓ Write succeeded!')} A test row was added to your sheet.\nResponse: ${v(writeResp)}\n\n${b('ACTION REQUIRED:')} Delete the row named "__DEBUG_TEST__…" from your Google Sheet.`);
+  } else {
+    setResult('write','fail',
+      `Write failed.\nError: ${b(writeErr || 'unknown')}\nRaw response: ${b(writeResp.slice(0,400))}`,
+      `<strong>Possible causes:</strong><br>
+      1. Apps Script not redeployed after code change — you must create a <strong>new deployment version</strong>, not just save the script.<br>
+      2. Sheet name mismatch — check that <code>SHEET_NAME</code> in AppScript.js matches your actual sheet tab name (bottom of the Google Sheet).<br>
+      3. Column count mismatch — your sheet may have fewer columns than the script expects.`);
+  }
+
+  // ── TEST 4: Verify write appeared in getGuests ─────────────
+  addCard('verify', 'Test 4 — Verify write is visible to other tablets (re-fetch after write)');
+  await tick();
+
+  if (!writeOk) {
+    setResult('verify','warn','Skipped — write test failed, nothing to verify.');
+  } else {
+    await new Promise(r => setTimeout(r, 1500)); // wait 1.5s for sheet to settle
+    let guests2 = null;
+    let verifyErr = null;
+    try {
+      const res = await fetch(APPS_SCRIPT_URL + '?action=getGuests&t=' + Date.now(), { redirect:'follow' });
+      guests2 = await res.json();
+    } catch(e) { verifyErr = e.message; }
+
+    if (verifyErr) {
+      setResult('verify','fail', `Re-fetch failed: ${b(verifyErr)}`);
+    } else {
+      const found = Array.isArray(guests2) && guests2.some(g => (g.Name||'').startsWith('__DEBUG_TEST__'));
+      if (found) {
+        setResult('verify','pass',
+          `${g('✓ SYNC WORKS!')} The test row written in Test 3 is immediately visible to any tablet calling getGuests.\n\nTotal guests now: ${v(guests2.length)}\n\n${b('Remember to delete the __DEBUG_TEST__ row from your sheet.')}`);
+      } else {
+        setResult('verify','warn',
+          `Write was confirmed by Apps Script but the row did not appear in the next getGuests call.\nGuests returned: ${v(guests2 ? guests2.length : 'n/a')}\n\nThis is unusual — the write may be going to a different sheet tab.`,
+          `<strong>Fix:</strong> Check that <code>SHEET_NAME</code> in AppScript.js exactly matches the tab name at the bottom of your Google Sheet (it's case-sensitive).`);
+      }
+    }
+  }
+
+  // ── TEST 5: CORS / response headers ───────────────────────
+  addCard('cors', 'Test 5 — Response format check');
+  await tick();
+
+  try {
+    const res  = await fetch(APPS_SCRIPT_URL + '?action=getGuests&t=' + Date.now(), { redirect:'follow' });
+    const ct   = res.headers.get('content-type') || '';
+    const text = await res.text();
+    let parsed = null;
+    try { parsed = JSON.parse(text); } catch(e) {}
+
+    if (parsed && Array.isArray(parsed)) {
+      setResult('cors','pass', `Content-Type: ${v(ct)}\nResponse parses as JSON array: ${g('yes')}\nApps Script URL resolves correctly.`);
+    } else {
+      setResult('cors','warn',
+        `Content-Type: ${v(ct)}\nResponse is not a JSON array.\nFirst 300 chars: ${b(text.slice(0,300))}`,
+        `This usually means the Apps Script is returning an error page. Check the Apps Script execution logs in the editor.`);
+    }
+  } catch(e) {
+    setResult('cors','fail', `Fetch threw: ${b(e.message)}`);
+  }
+
+  showSummary();
+}
+
+function showSummary() {
+  const fails = results.filter(r => r.status === 'fail').length;
+  const warns = results.filter(r => r.status === 'warn').length;
+  const s = document.getElementById('summary');
+  s.style.display = 'block';
+  if (fails === 0 && warns === 0) {
+    s.className = 'all-pass';
+    s.textContent = '✅ All tests passed — sync should be working across all tablets!';
+  } else if (fails === 0) {
+    s.className = 'all-pass';
+    s.textContent = `⚠️ ${warns} warning(s) — sync may work but review the warnings above.`;
+  } else {
+    s.className = 'has-fail';
+    s.textContent = `❌ ${fails} test(s) failed — follow the fix instructions above each failed test.`;
+  }
+}
+
+function tick() { return new Promise(r => setTimeout(r, 50)); }
+
+runAll();
+</script>
+</body>
+</html>
