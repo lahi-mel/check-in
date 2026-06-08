@@ -918,30 +918,47 @@ async function submitCheckIn() {
     Source:          'kiosk',
   };
 
-  // Save locally first
+  // Save locally first (offline backup)
   saveToLocalLog(entryData);
 
-  // Build form data
-  const fd = new FormData();
-  Object.entries(entryData).forEach(([k,v]) => fd.append(k,v));
+  // ── Build URL params and call Apps Script via GET
+  // Apps Script reads e.parameter — GET with URL params is the only reliable
+  // method from a browser (POST with FormData gets eaten by the redirect chain)
   const target = matchedGuest || existingGuest;
-  if (target && target._rowIndex) {
-    fd.append('action',   'updateArrival');
-    fd.append('rowIndex', target._rowIndex);
-    const key = Object.keys(target).find(k=>/arrivaltime|arrival time/i.test(k)) || 'ArrivalTime';
+  const params = new URLSearchParams({
+    ...entryData,
+    action:   target && target._rowIndex != null ? 'updateArrival' : 'addNewGuest',
+    rowIndex: target && target._rowIndex != null ? String(target._rowIndex) : '',
+    name:     name,
+    organisation:    entryData.Organisation,
+    designation:     entryData.Designation,
+    email:           entryData.Email,
+    mobile:          entryData.Mobile,
+    remark:          entryData.Remark,
+    arrivalTime:     arrivalTime,
+    gift_applicable: giftApplicable,
+  });
+
+  // Update local cache immediately so this tablet's UI is instant
+  if (target && target._rowIndex != null) {
+    const key = Object.keys(target).find(k => /arrivaltime|arrival time/i.test(k)) || 'ArrivalTime';
     target[key] = arrivalTime;
   } else {
-    fd.append('action', 'addNewGuest');
-    guestList.push({ _rowIndex: guestList.length+2, ...entryData });
+    guestList.push({ _rowIndex: guestList.length + 2, ...entryData });
   }
 
   // Sync to Apps Script
   let synced = false;
   if (!APPS_SCRIPT_URL.includes('YOUR_DEPLOYMENT_ID')) {
     try {
-      await fetch(APPS_SCRIPT_URL, { method:'POST', body:fd });
-      synced = true;
-    } catch(e) { console.warn('[Kiosk] Sync failed, saved locally'); }
+      const res = await fetch(APPS_SCRIPT_URL + '?' + params.toString(), {
+        method: 'GET',
+        redirect: 'follow',
+      });
+      const json = await res.json().catch(() => ({}));
+      synced = json.status === 'success';
+      if (!synced) console.warn('[Kiosk] Apps Script returned:', json);
+    } catch(e) { console.warn('[Kiosk] Sync failed, saved locally:', e.message); }
   }
 
   updateDashboard();
