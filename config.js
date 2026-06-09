@@ -8,7 +8,7 @@
 // Deploy via: Apps Script → Deploy → New deployment → Web App
 // Execute as: Me  |  Who has access: Anyone
 // NOTE: All live data sync goes through this URL — it's the single source of truth.
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzpTKK8yNtA34HZJ7m6wmlMuuwGZjuRRUmKsbs_XL-G3_V3C_euK9mhhUpsEqGh2rTW/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjTCNl5CGspyWYLsVKibXQIMMk8KGgew48z31cIhMRey2aDM6tFv9Cum3LExPig__j/exec';
 
 // Your Google Sheet "Publish to web" CSV URL
 // Still needed as a fallback reference — keep it updated.
@@ -17,4 +17,4 @@ const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQppAQITD
 
 // How often each tablet silently re-syncs (seconds).
 // 15s = snappy sync across all 4 tablets. Don't go below 10.
-const SYNC_INTERVAL_SEC = 15;
+const SYNC_INTERVAL_SEC = 20;
